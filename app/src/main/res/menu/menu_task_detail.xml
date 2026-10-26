@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_edit"
+        android:icon="@drawable/ic_edit"
+        android:title="@string/action_edit"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_inbox"
+        android:title="@string/menu_tasks_inbox" />
+    <item
+        android:id="@+id/action_new_task"
+        android:title="@string/menu_tasks_new" />
+    <item
+        android:id="@+id/action_matrix"
+        android:title="@string/menu_tasks_matrix" />
+</menu>

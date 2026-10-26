@@ -1,3 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FocusLoop</string>
+
+    <!-- Common -->
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_add">Add</string>
+    <string name="action_edit">Edit</string>
+    <string name="cd_add_task">Add task</string>
+    <string name="cd_next_day">Next day</string>
+    <string name="cd_previous_day">Previous day</string>
+    <string name="cd_next_week">Next week</string>
+    <string name="cd_previous_week">Previous week</string>
+
+    <!-- Main -->
+    <string name="main_greeting">Good morning</string>
+    <string name="main_greeting_afternoon">Good afternoon</string>
+    <string name="main_greeting_evening">Good evening</string>
+    <string name="main_tagline">Pick one thing. Start it in five seconds.</string>
+    <string name="main_frog_label">TODAY’S FROG</string>
+    <string name="main_frog_title">Redesign the case study layout</string>
+    <string name="main_frog_meta">A · Due today</string>
+    <string name="main_frog_start">Start focus</string>
+    <string name="main_next_label">NEXT BLOCK</string>
+    <string name="main_next_time">10:00 – 11:00</string>
+    <string name="main_next_title">Redesign case study</string>
+    <string name="main_focus_label">FOCUSED TODAY</string>
+    <string name="main_focus_minutes">70</string>
+    <string name="main_focus_unit">min</string>
+    <string name="main_focus_sessions">3 sessions</string>
+    <string name="main_modules_label">MODULES</string>
+    <string name="main_tasks_title">Tasks</string>
+    <string name="main_tasks_sub">Inbox, matrix, priorities</string>
+    <string name="main_focus_title">Focus</string>
+    <string name="main_focus_sub">Pomodoro, history, timer</string>
+    <string name="main_plan_title">Plan</string>
+    <string name="main_plan_sub">Time blocks, review, stats</string>
+
+    <!-- Task inbox -->
+    <string name="title_tasks">Tasks</string>
+    <string name="inbox_summary">8 open · 3 due today</string>
+    <string name="inbox_summary_format">%1$d open · %2$d due today</string>
+    <string name="inbox_filter_priority">Priority</string>
+    <string name="inbox_filter_due">Due date</string>
+    <string name="inbox_empty_title">Nothing on the list</string>
+    <string name="inbox_empty_body">Add the first thing that comes to mind.</string>
+    <string name="inbox_empty_action">Add a task</string>
+
+    <!-- Task editor -->
+    <string name="title_new_task">New task</string>
+    <string name="title_edit_task">Edit task</string>
+    <string name="label_title">TITLE</string>
+    <string name="hint_title">What needs doing?</string>
+    <string name="label_notes">NOTES</string>
+    <string name="hint_notes">Detail worth remembering</string>
+    <string name="label_priority">PRIORITY</string>
+    <string name="priority_a">A</string>
+    <string name="priority_b">B</string>
+    <string name="priority_c">C</string>
+    <string name="priority_d">D</string>
+    <string name="priority_e">E</string>
+    <string name="priority_hint_a">A · Must do today</string>
+    <string name="priority_hint_b">B · Should do soon</string>
+    <string name="priority_hint_c">C · Someone is waiting</string>
+    <string name="priority_hint_d">D · Nice to do</string>
+    <string name="priority_hint_e">E · Someday</string>
+    <string name="label_must_today">Must do today</string>
+    <string name="must_today_sub">Wins the frog slot if it is the top task.</string>
+    <string name="label_due">DUE DATE</string>
+    <string name="due_none">No date</string>
+    <string name="due_tap">Tap to pick a date</string>
+    <string name="quadrant_hint">Files into Q1 · Important and urgent</string>
+    <string name="error_title_required">Give the task a title first</string>
+
+    <!-- Matrix -->
+    <string name="title_matrix">Matrix</string>
+    <string name="matrix_frog_label">TODAY’S FROG</string>
+    <string name="matrix_q1">Important &amp; urgent</string>
+    <string name="matrix_q2">Important, not urgent</string>
+    <string name="matrix_q3">Urgent, not important</string>
+    <string name="matrix_q4">Neither</string>
+    <string name="matrix_count_one">1 task</string>
+    <string name="matrix_count_two">2 tasks</string>
+    <string name="matrix_count_three">3 tasks</string>
+    <string name="matrix_legend">A → Q1 · B → Q2 · C → Q3 · D/E → Q4</string>
+    <string name="matrix_q1_t1">Redesign the case study layout</string>
+    <string name="matrix_q1_t2">Reply to the client about scope</string>
+    <string name="matrix_q2_t1">Outline the A2 database schema</string>
+    <string name="matrix_q2_t2">Read chapter 7 on notifications</string>
+    <string name="matrix_q3_t1">Book the dentist</string>
+    <string name="matrix_q4_t1">Clean up Figma components</string>
+    <string name="matrix_q4_t2">Plan the weekend trip</string>
+    <string name="matrix_more">+1 more</string>
+
+    <!-- Task detail -->
+    <string name="title_task">Task</string>
+    <string name="detail_due_today">Due today</string>
+    <string name="detail_quadrant">Q1 · Important &amp; urgent</string>
+    <string name="detail_label_notes">NOTES</string>
+    <string name="detail_label_focus">FOCUSED ON THIS</string>
+    <string name="detail_focus_value">3 sessions · 70 min</string>
+    <plurals name="detail_sessions">
+        <item quantity="one">%1$d session</item>
+        <item quantity="other">%1$d sessions</item>
+    </plurals>
+    <string name="detail_notes_mock">Reduce the case study page to one column, keep the process photos, and cut the copy in half. Print it at A3 to check the grid before the review.</string>
+    <string name="detail_start_focus">Start focus</string>
+    <string name="detail_mark_complete">Mark complete</string>
+    <string name="delete_task_title">Delete task?</string>
+    <string name="delete_task_body">“%1$s” will be removed from the list.</string>
+    <string name="action_delete">Delete</string>
+
+    <!-- Pomodoro -->
+    <string name="title_focus">Focus</string>
+    <string name="focus_task_default">Free focus</string>
+    <string name="focus_no_task_meta">Pick a task to link</string>
+    <string name="focus_session">SESSION 1 OF 4</string>
+    <string name="focus_time">25:00</string>
+    <string name="focus_five_second">5-second start</string>
+    <string name="focus_today_label">TODAY</string>
+    <string name="focus_today_value">3 sessions · 70 min</string>
+    <string name="focus_hint">One loop at a time.</string>
+    <string name="focus_caption">25 min focus</string>
+    <string name="focus_reset_toast">Timer reset</string>
+    <string name="focus_pause_toast">Timer paused</string>
+    <string name="cd_reset_timer">Reset timer</string>
+    <string name="cd_pause_timer">Pause timer</string>
+    <string name="cd_start_timer">Start timer</string>
+
+    <!-- Timer settings -->
+    <string name="title_settings">Timer settings</string>
+    <string name="settings_session_label">SESSION</string>
+    <string name="settings_focus_length">Focus length</string>
+    <string name="settings_focus_value">25 min</string>
+    <string name="settings_break_length">Break length</string>
+    <string name="settings_break_value">5 min</string>
+    <string name="settings_value_format">%1$d min</string>
+    <string name="settings_switch_label">BEHAVIOUR</string>
+    <string name="settings_sound">Sound</string>
+    <string name="settings_sound_sub">Play a tone when the loop ends</string>
+    <string name="settings_dark">Dark theme</string>
+    <string name="settings_dark_sub">Use the system setting</string>
+    <string name="settings_restore">Restore defaults</string>
+
+    <!-- Five second -->
+    <string name="five_ready">GET READY</string>
+    <string name="five_hint">Tap anywhere to start</string>
+    <string name="five_skip">Skip</string>
+    <string name="five_count">5</string>
+    <string name="five_go">GO</string>
+    <string name="five_task_fallback">Redesign the case study layout</string>
+
+    <!-- Focus history -->
+    <string name="title_history">Focus history</string>
+    <string name="history_sessions">SESSIONS</string>
+    <string name="history_minutes">MINUTES</string>
+    <string name="history_summary_sessions">3</string>
+    <string name="history_summary_minutes">70</string>
+    <string name="history_completed">Completed</string>
+    <string name="history_stopped">Stopped early</string>
+    <string name="history_empty_title">No sessions yet</string>
+    <string name="history_empty_body">Finish a pomodoro and it lands here.</string>
+
+    <!-- Plan -->
+    <string name="title_plan">Plan</string>
+    <string name="plan_date">Mon 26 Oct</string>
+    <string name="plan_today">Today</string>
+    <string name="plan_tomorrow">Tomorrow</string>
+    <string name="plan_yesterday">Yesterday</string>
+    <string name="plan_selected">Selected day</string>
+    <string name="block_meta_format">%1$s · 60 min</string>
+    <string name="plan_hint">Tap an hour to plan it.</string>
+    <string name="plan_now">NOW</string>
+    <string name="plan_add_block">Add a block</string>
+
+    <!-- Block dialog -->
+    <string name="dialog_new_block">New block</string>
+    <string name="dialog_edit_block">Edit block</string>
+    <string name="dialog_block_hint">What are you doing?</string>
+    <string name="dialog_link_task">LINK A TASK</string>
+    <string name="dialog_no_task">No task</string>
+    <string name="action_save_block">Save block</string>
+    <string name="action_delete_block">Delete block</string>
+
+    <!-- Two minute list -->
+    <string name="title_two_minute">2-minute list</string>
+    <string name="two_sub">Small things, out of the way.</string>
+    <string name="hint_two_input">Under 2 minutes</string>
+    <string name="two_clear">Clear completed</string>
+    <string name="two_empty_title">Nothing waiting</string>
+    <string name="two_empty_body">If it takes under 2 minutes, put it here.</string>
+    <string name="two_left">%1$d left</string>
+
+    <!-- Daily review -->
+    <string name="title_review">Daily review</string>
+    <string name="review_date">Monday · 26 October</string>
+    <string name="review_question">How did today go?</string>
+    <string name="review_stat_sessions">SESSIONS</string>
+    <string name="review_stat_tasks">TASKS DONE</string>
+    <string name="review_stat_hours">PLANNED</string>
+    <string name="review_sessions_value">3</string>
+    <string name="review_tasks_value">5</string>
+    <string name="review_hours_value">4.5</string>
+    <string name="review_q1">WHAT WENT WELL</string>
+    <string name="review_q2">WHAT GOT IN THE WAY</string>
+    <string name="review_q3">TOMORROW’S ONE THING</string>
+    <string name="hint_review_q1">One thing you are glad you did</string>
+    <string name="hint_review_q2">Name the friction, not the feeling</string>
+    <string name="hint_review_q3">Small enough to actually start</string>
+    <string name="review_view_stats">View statistics</string>
+
+    <!-- Statistics -->
+    <string name="title_stats">Statistics</string>
+    <string name="stats_week">20 – 26 October</string>
+    <string name="stats_this_week">This week</string>
+    <string name="stats_last_week">Last week</string>
+    <string name="stats_next_week">Next week</string>
+    <string name="stats_selected_week">Selected week</string>
+    <string name="stats_overview">OVERVIEW</string>
+    <string name="stats_focus_time">Focus time</string>
+    <string name="stats_sessions">Sessions</string>
+    <string name="stats_tasks">Tasks completed</string>
+    <string name="stats_accuracy">Plan accuracy</string>
+    <string name="stats_deep">Deep work</string>
+    <string name="stats_value_focus">12h 30m</string>
+    <string name="stats_value_sessions">18</string>
+    <string name="stats_value_tasks">9 / 14</string>
+    <string name="stats_value_accuracy">78%</string>
+    <string name="stats_value_deep">62%</string>
+    <string name="stats_total_label">TOTAL THIS WEEK</string>
+    <string name="stats_total_value">12h 30m focused</string>
+    <string name="stats_delta">+18% vs last week</string>
+
+    <!-- Menus -->
+    <string name="menu_tasks_inbox">Task inbox</string>
+    <string name="menu_tasks_new">New task</string>
+    <string name="menu_tasks_matrix">Matrix</string>
+    <string name="menu_tasks_sort_priority">Sort by priority</string>
+    <string name="menu_tasks_sort_due">Sort by due date</string>
+    <string name="menu_focus_pomodoro">Pomodoro</string>
+    <string name="menu_focus_five">5-second start</string>
+    <string name="menu_focus_history">Focus history</string>
+    <string name="menu_focus_settings">Timer settings</string>
+    <string name="menu_plan_blocks">Time blocks</string>
+    <string name="menu_plan_two">2-minute list</string>
+    <string name="menu_plan_review">Daily review</string>
+    <string name="menu_plan_stats">Statistics</string>
 </resources>

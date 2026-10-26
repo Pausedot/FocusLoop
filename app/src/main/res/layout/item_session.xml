@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="64dp">
+
+    <View
+        android:id="@+id/sessionDot"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:layout_marginTop="22dp"
+        android:background="@drawable/bg_dot_accent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sessionTime"
+        style="@style/Text.Caption"
+        android:layout_width="44dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_md"
+        android:layout_marginTop="14dp"
+        android:fontFamily="sans-serif-monospace"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/sessionDot"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="09:12" />
+
+    <TextView
+        android:id="@+id/sessionTitle"
+        style="@style/Text.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_md"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="@dimen/space_md"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="2"
+        app:layout_constraintEnd_toStartOf="@id/sessionDuration"
+        app:layout_constraintStart_toEndOf="@id/sessionTime"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Redesign the case study layout" />
+
+    <TextView
+        android:id="@+id/sessionStatus"
+        style="@style/Text.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/sessionDuration"
+        app:layout_constraintStart_toStartOf="@id/sessionTitle"
+        app:layout_constraintTop_toBottomOf="@id/sessionTitle"
+        tools:text="Completed" />
+
+    <TextView
+        android:id="@+id/sessionDuration"
+        style="@style/Text.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-monospace"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="13sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/sessionTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="25 min" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/space_lg"
+        android:layout_marginTop="@dimen/space_md"
+        android:background="?attr/colorOutlineVariant"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sessionStatus" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

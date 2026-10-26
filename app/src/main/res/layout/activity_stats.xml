@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.FocusLoop.Toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/title_stats"
+        app:titleTextAppearance="@style/Text.Toolbar" />
+
+    <LinearLayout
+        android:id="@+id/weekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_xs"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/space_sm"
+        android:paddingEnd="@dimen/space_sm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPrevWeek"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="@dimen/touch_target"
+            android:layout_height="@dimen/touch_target"
+            android:contentDescription="@string/cd_previous_week"
+            app:icon="@drawable/ic_chevron_left"
+            app:iconTint="?attr/colorOnSurfaceVariant" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/weekText"
+                style="@style/Text.H2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/stats_week"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/weekCaption"
+                style="@style/Text.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/stats_this_week" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNextWeek"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="@dimen/touch_target"
+            android:layout_height="@dimen/touch_target"
+            android:contentDescription="@string/cd_next_week"
+            app:icon="@drawable/ic_chevron_right"
+            app:iconTint="?attr/colorOnSurfaceVariant" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/weekBar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/screen_margin"
+            android:paddingTop="@dimen/space_md"
+            android:paddingEnd="@dimen/screen_margin"
+            android:paddingBottom="@dimen/space_xl">
+
+            <TextView
+                android:id="@+id/overviewLabel"
+                style="@style/Text.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/stats_overview"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Metric 1 -->
+            <TextView
+                android:id="@+id/focusTimeLabel"
+                style="@style/Text.Body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_lg"
+                android:text="@string/stats_focus_time"
+                app:layout_constraintEnd_toStartOf="@id/focusTimeValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/overviewLabel" />
+
+            <TextView
+                android:id="@+id/focusTimeValue"
+                style="@style/Text.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-monospace"
+                android:text="@string/stats_value_focus"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/focusTimeLabel"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/focusTimeBar"
+                style="@style/Widget.FocusLoop.Progress"
+                android:layout_width="0dp"
+                android:layout_height="6dp"
+                android:layout_marginTop="@dimen/space_sm"
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="78"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/focusTimeLabel" />
+
+            <!-- Metric 2 -->
+            <TextView
+                android:id="@+id/sessionsLabel"
+                style="@style/Text.Body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xl"
+                android:text="@string/stats_sessions"
+                app:layout_constraintEnd_toStartOf="@id/sessionsValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/focusTimeBar" />
+
+            <TextView
+                android:id="@+id/sessionsValue"
+                style="@style/Text.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-monospace"
+                android:text="@string/stats_value_sessions"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/sessionsLabel"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/sessionsBar"
+                style="@style/Widget.FocusLoop.Progress"
+                android:layout_width="0dp"
+                android:layout_height="6dp"
+                android:layout_marginTop="@dimen/space_sm"
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="72"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sessionsLabel" />
+
+            <!-- Metric 3 -->
+            <TextView
+                android:id="@+id/tasksLabel"
+                style="@style/Text.Body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xl"
+                android:text="@string/stats_tasks"
+                app:layout_constraintEnd_toStartOf="@id/tasksValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sessionsBar" />
+
+            <TextView
+                android:id="@+id/tasksValue"
+                style="@style/Text.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-monospace"
+                android:text="@string/stats_value_tasks"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/tasksLabel"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/tasksBar"
+                style="@style/Widget.FocusLoop.Progress"
+                android:layout_width="0dp"
+                android:layout_height="6dp"
+                android:layout_marginTop="@dimen/space_sm"
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="64"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tasksLabel" />
+
+            <!-- Metric 4 -->
+            <TextView
+                android:id="@+id/accuracyLabel"
+                style="@style/Text.Body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xl"
+                android:text="@string/stats_accuracy"
+                app:layout_constraintEnd_toStartOf="@id/accuracyValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tasksBar" />
+
+            <TextView
+                android:id="@+id/accuracyValue"
+                style="@style/Text.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-monospace"
+                android:text="@string/stats_value_accuracy"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/accuracyLabel"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/accuracyBar"
+                style="@style/Widget.FocusLoop.Progress"
+                android:layout_width="0dp"
+                android:layout_height="6dp"
+                android:layout_marginTop="@dimen/space_sm"
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="78"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/accuracyLabel" />
+
+            <!-- Metric 5 -->
+            <TextView
+                android:id="@+id/deepLabel"
+                style="@style/Text.Body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xl"
+                android:text="@string/stats_deep"
+                app:layout_constraintEnd_toStartOf="@id/deepValue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/accuracyBar" />
+
+            <TextView
+                android:id="@+id/deepValue"
+                style="@style/Text.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-monospace"
+                android:text="@string/stats_value_deep"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/deepLabel"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ProgressBar
+                android:id="@+id/deepBar"
+                style="@style/Widget.FocusLoop.Progress"
+                android:layout_width="0dp"
+                android:layout_height="6dp"
+                android:layout_marginTop="@dimen/space_sm"
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="62"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/deepLabel" />
+
+            <!-- Total -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/totalCard"
+                style="@style/Widget.FocusLoop.Card.AccentSoft"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xl"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/deepBar">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/space_lg">
+
+                    <TextView
+                        android:id="@+id/totalLabel"
+                        style="@style/Text.Label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/stats_total_label"
+                        android:textColor="@color/accent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/totalValue"
+                        style="@style/Text.H2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_xs"
+                        android:text="@string/stats_total_value"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/totalLabel" />
+
+                    <TextView
+                        android:id="@+id/totalDelta"
+                        style="@style/Text.Caption"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/stats_delta"
+                        android:textColor="@color/accent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/totalValue" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,16 +11,61 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FocusLoop">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Subsystem 1: tasks and priorities -->
+        <activity
+            android:name=".tasks.TaskInboxActivity"
+            android:exported="false" />
+        <activity
+            android:name=".tasks.TaskEditActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".tasks.MatrixActivity"
+            android:exported="false" />
+        <activity
+            android:name=".tasks.TaskDetailActivity"
+            android:exported="false" />
+
+        <!-- Subsystem 2: focus -->
+        <activity
+            android:name=".focus.PomodoroActivity"
+            android:exported="false" />
+        <activity
+            android:name=".focus.TimerSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".focus.FiveSecondActivity"
+            android:exported="false" />
+        <activity
+            android:name=".focus.FocusHistoryActivity"
+            android:exported="false" />
+
+        <!-- Subsystem 3: planning and review -->
+        <activity
+            android:name=".planning.TimeBlocksActivity"
+            android:exported="false" />
+        <activity
+            android:name=".planning.TwoMinuteActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".planning.DailyReviewActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".planning.StatsActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

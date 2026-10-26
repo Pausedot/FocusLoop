@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_time_blocks"
+        android:title="@string/menu_plan_blocks" />
+    <item
+        android:id="@+id/action_two_minute"
+        android:title="@string/menu_plan_two" />
+    <item
+        android:id="@+id/action_daily_review"
+        android:title="@string/menu_plan_review" />
+    <item
+        android:id="@+id/action_stats"
+        android:title="@string/menu_plan_stats" />
+</menu>

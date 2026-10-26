@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_pomodoro"
+        android:title="@string/menu_focus_pomodoro" />
+    <item
+        android:id="@+id/action_five_second"
+        android:title="@string/menu_focus_five" />
+    <item
+        android:id="@+id/action_history"
+        android:title="@string/menu_focus_history" />
+    <item
+        android:id="@+id/action_timer_settings"
+        android:title="@string/menu_focus_settings" />
+</menu>
