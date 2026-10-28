@@ -64,6 +64,18 @@ public class TaskInboxActivity extends ModuleActivity {
         updateEmptyState();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (adapter == null) {
+            return;
+        }
+        tasks.clear();
+        tasks.addAll(DemoData.tasks());
+        rebuildRows();
+        updateSummary();
+    }
+
     private void openDetail(Task task) {
         Intent intent = new Intent(this, TaskDetailActivity.class);
         intent.putExtra(Extras.TASK_ID, task.id);

@@ -62,7 +62,10 @@ public class TaskDetailActivity extends ModuleActivity {
             intent.putExtra(Extras.TASK_TITLE, titleView.getText().toString());
             startActivity(intent);
         });
-        findViewById(R.id.btnComplete).setOnClickListener(v -> finish());
+        findViewById(R.id.btnComplete).setOnClickListener(v -> {
+            DemoData.setDone(task.id, true);
+            finish();
+        });
     }
 
     private static int quadrantLabel(String quadrant) {

@@ -1,7 +1,9 @@
 package itech3106.focusloop.data;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Static demo content for Assignment 1. Diagrams and lists need something to show,
@@ -13,7 +15,17 @@ public final class DemoData {
             "Reduce the case study page to one column, keep the process photos, and cut the copy "
                     + "in half. Print it at A3 to check the grid before the review.";
 
+    private static final Set<String> DONE_IDS = new HashSet<>();
+
     private DemoData() {
+    }
+
+    public static void setDone(String id, boolean done) {
+        if (done) {
+            DONE_IDS.add(id);
+        } else {
+            DONE_IDS.remove(id);
+        }
     }
 
     public static List<Task> tasks() {
@@ -33,6 +45,9 @@ public final class DemoData {
                 "Check the train times on Thursday.", false));
         tasks.add(new Task("t8", "Update the resume", 'E', "No date", "Q4",
                 "Add the focus app once the prototype is done.", false));
+        for (Task task : tasks) {
+            task.done = DONE_IDS.contains(task.id);
+        }
         return tasks;
     }
 

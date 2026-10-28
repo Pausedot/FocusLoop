@@ -15,6 +15,7 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import java.util.List;
 
 import itech3106.focusloop.R;
+import itech3106.focusloop.data.DemoData;
 import itech3106.focusloop.data.Task;
 
 /** Rows are either a section header (String) or a task. */
@@ -75,6 +76,7 @@ public class TaskAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 return;
             }
             task.done = taskHolder.check.isChecked();
+            DemoData.setDone(task.id, task.done);
             notifyItemChanged(pos);
         });
         holder.itemView.setOnClickListener(v -> listener.onTaskClick(task));
