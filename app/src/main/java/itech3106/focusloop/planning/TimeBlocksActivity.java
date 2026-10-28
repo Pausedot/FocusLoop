@@ -9,6 +9,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -18,18 +20,31 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import itech3106.focusloop.Extras;
 import itech3106.focusloop.ModuleActivity;
 import itech3106.focusloop.R;
 import itech3106.focusloop.adapter.TimeSlotAdapter;
+import itech3106.focusloop.adapter.WeekAdapter;
 import itech3106.focusloop.data.DemoData;
 import itech3106.focusloop.data.TimeSlot;
+import itech3106.focusloop.data.WeekDay;
+import itech3106.focusloop.tasks.TaskDetailActivity;
 import itech3106.focusloop.tasks.TaskInboxActivity;
 
 public class TimeBlocksActivity extends ModuleActivity {
 
     private final List<TimeSlot> slots = new ArrayList<>();
     private TimeSlotAdapter adapter;
-    private int dayOffset = 0;
+    private RecyclerView slotList;
+    private RecyclerView weekList;
+    private TextView weekSummary;
+    private TextView planHint;
+    private MaterialButton btnPrev;
+    private MaterialButton btnNext;
+
+    private boolean weekMode;
+    private int dayOffset;
+    private int weekOffset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,43 +54,112 @@ public class TimeBlocksActivity extends ModuleActivity {
 
         slots.addAll(DemoData.slots());
         adapter = new TimeSlotAdapter(slots, this::showBlockDialog);
-        RecyclerView list = findViewById(R.id.slotList);
-        list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(adapter);
+        slotList = findViewById(R.id.slotList);
+        slotList.setLayoutManager(new LinearLayoutManager(this));
+        slotList.setAdapter(adapter);
 
-        findViewById(R.id.btnPrevDay).setOnClickListener(v -> {
-            dayOffset--;
-            updateDate();
+        WeekAdapter weekAdapter = new WeekAdapter(DemoData.weekDays(), this::openTask);
+        weekList = findViewById(R.id.weekList);
+        weekList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        weekList.setAdapter(weekAdapter);
+
+        weekSummary = findViewById(R.id.weekSummary);
+        planHint = findViewById(R.id.planHint);
+        btnPrev = findViewById(R.id.btnPrevDay);
+        btnNext = findViewById(R.id.btnNextDay);
+
+        ChipGroup viewToggle = findViewById(R.id.viewToggle);
+        viewToggle.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            weekMode = checkedIds.contains(R.id.chipWeek);
+            applyMode();
         });
-        findViewById(R.id.btnNextDay).setOnClickListener(v -> {
-            dayOffset++;
-            updateDate();
-        });
-        updateDate();
+
+        btnPrev.setOnClickListener(v -> shift(-1));
+        btnNext.setOnClickListener(v -> shift(1));
+
+        applyMode();
     }
 
-    private void updateDate() {
+    private void shift(int direction) {
+        if (weekMode) {
+            weekOffset += direction;
+        } else {
+            dayOffset += direction;
+        }
+        updateHeader();
+    }
+
+    private void applyMode() {
+        slotList.setVisibility(weekMode ? View.GONE : View.VISIBLE);
+        weekList.setVisibility(weekMode ? View.VISIBLE : View.GONE);
+        weekSummary.setVisibility(weekMode ? View.VISIBLE : View.GONE);
+        planHint.setText(weekMode ? R.string.plan_week_hint : R.string.plan_hint);
+
+        btnPrev.setContentDescription(getString(
+                weekMode ? R.string.cd_previous_week : R.string.cd_previous_day));
+        btnNext.setContentDescription(getString(
+                weekMode ? R.string.cd_next_week : R.string.cd_next_day));
+
+        updateHeader();
+    }
+
+    private void updateHeader() {
+        TextView dateText = findViewById(R.id.dateText);
+        TextView dateCaption = findViewById(R.id.dateCaption);
+
+        if (weekMode) {
+            Calendar day = Calendar.getInstance();
+            day.add(Calendar.DAY_OF_YEAR, weekOffset * 7);
+            int dayOfWeek = day.get(Calendar.DAY_OF_WEEK);
+            day.add(Calendar.DAY_OF_YEAR, -((dayOfWeek + 5) % 7));
+
+            Calendar start = (Calendar) day.clone();
+            day.add(Calendar.DAY_OF_YEAR, 6);
+
+            SimpleDateFormat format = new SimpleDateFormat("d MMM", Locale.ENGLISH);
+            dateText.setText(format.format(start.getTime()) + " – " + format.format(day.getTime()));
+
+            int captionRes;
+            if (weekOffset == 0) {
+                captionRes = R.string.stats_this_week;
+            } else if (weekOffset == -1) {
+                captionRes = R.string.stats_last_week;
+            } else if (weekOffset == 1) {
+                captionRes = R.string.stats_next_week;
+            } else {
+                captionRes = R.string.stats_selected_week;
+            }
+            dateCaption.setText(captionRes);
+            return;
+        }
+
         Calendar day = Calendar.getInstance();
         day.add(Calendar.DAY_OF_YEAR, dayOffset);
-        ((TextView) findViewById(R.id.dateText)).setText(
-                new SimpleDateFormat("EEE d MMM", Locale.ENGLISH).format(day.getTime()));
+        dateText.setText(new SimpleDateFormat("EEE d MMM", Locale.ENGLISH).format(day.getTime()));
 
-        int caption;
+        int captionRes;
         switch (dayOffset) {
             case 0:
-                caption = R.string.plan_today;
+                captionRes = R.string.plan_today;
                 break;
             case 1:
-                caption = R.string.plan_tomorrow;
+                captionRes = R.string.plan_tomorrow;
                 break;
             case -1:
-                caption = R.string.plan_yesterday;
+                captionRes = R.string.plan_yesterday;
                 break;
             default:
-                caption = R.string.plan_selected;
+                captionRes = R.string.plan_selected;
                 break;
         }
-        ((TextView) findViewById(R.id.dateCaption)).setText(caption);
+        dateCaption.setText(captionRes);
+    }
+
+    private void openTask(WeekDay.WeekTask task) {
+        Intent intent = new Intent(this, TaskDetailActivity.class);
+        intent.putExtra(Extras.TASK_ID, task.id);
+        intent.putExtra(Extras.TASK_TITLE, task.title);
+        startActivity(intent);
     }
 
     private void showBlockDialog(TimeSlot slot) {

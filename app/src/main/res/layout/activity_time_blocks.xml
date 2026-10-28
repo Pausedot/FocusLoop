@@ -73,6 +73,35 @@
             app:iconTint="?attr/colorOnSurfaceVariant" />
     </LinearLayout>
 
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/viewToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_sm"
+        app:checkedChip="@id/chipDay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dateBar"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipDay"
+            style="@style/Widget.FocusLoop.Chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="@string/plan_day" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipWeek"
+            style="@style/Widget.FocusLoop.Chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="@string/plan_week" />
+    </com.google.android.material.chip.ChipGroup>
+
     <TextView
         android:id="@+id/planHint"
         style="@style/Text.Caption"
@@ -83,7 +112,7 @@
         android:text="@string/plan_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dateBar" />
+        app:layout_constraintTop_toBottomOf="@id/viewToggle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/slotList"
@@ -99,5 +128,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/planHint"
         tools:listitem="@layout/item_time_slot" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/weekList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/space_sm"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/screen_margin"
+        android:paddingTop="@dimen/space_sm"
+        android:paddingEnd="@dimen/screen_margin"
+        android:paddingBottom="@dimen/space_sm"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/weekSummary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/planHint"
+        tools:listitem="@layout/item_week_day" />
+
+    <TextView
+        android:id="@+id/weekSummary"
+        style="@style/Text.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:paddingTop="@dimen/space_md"
+        android:paddingBottom="@dimen/space_lg"
+        android:text="@string/plan_week_summary"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

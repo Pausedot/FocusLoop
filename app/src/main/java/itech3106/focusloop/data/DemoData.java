@@ -140,6 +140,27 @@ public final class DemoData {
         return slots;
     }
 
+    public static List<WeekDay> weekDays() {
+        List<WeekDay> days = new ArrayList<>();
+        days.add(new WeekDay("MON", "26", 60, false, false, weekTasks("t1")));
+        days.add(new WeekDay("TUE", "27", 45, false, false, weekTasks("t3")));
+        days.add(new WeekDay("WED", "28", 75, true, false, weekTasks("t1", "t2", "t5")));
+        days.add(new WeekDay("THU", "29", 25, false, false, weekTasks("t5")));
+        days.add(new WeekDay("FRI", "30", 45, false, true, weekTasks("t6")));
+        days.add(new WeekDay("SAT", "31", 30, false, false, weekTasks("t7")));
+        days.add(new WeekDay("SUN", "1", 0, false, false, new ArrayList<>()));
+        return days;
+    }
+
+    private static List<WeekDay.WeekTask> weekTasks(String... ids) {
+        List<WeekDay.WeekTask> tasks = new ArrayList<>();
+        for (String id : ids) {
+            Task task = task(id);
+            tasks.add(new WeekDay.WeekTask(task.id, task.title));
+        }
+        return tasks;
+    }
+
     public static List<ChecklistItem> checklist() {
         List<ChecklistItem> items = new ArrayList<>();
         items.add(new ChecklistItem("Reply to Sam's message", true));
