@@ -122,8 +122,13 @@
     <string name="focus_today_value">3 sessions · 70 min</string>
     <string name="focus_hint">One loop at a time.</string>
     <string name="focus_caption">25 min focus</string>
-    <string name="focus_reset_toast">Timer reset</string>
-    <string name="focus_pause_toast">Timer paused</string>
+    <string name="session_complete_title">Session complete</string>
+    <string name="session_complete_message">25 minutes focused</string>
+    <string name="session_start_another">Start another</string>
+    <string name="session_back_to_task">Back to task</string>
+    <string name="notification_channel_name">Focus sessions</string>
+    <string name="notification_title">Focus complete</string>
+    <string name="notification_text_format">%1$s · %2$d min</string>
     <string name="cd_reset_timer">Reset timer</string>
     <string name="cd_pause_timer">Pause timer</string>
     <string name="cd_start_timer">Start timer</string>
@@ -173,6 +178,11 @@
     <string name="plan_hint">Tap an hour to plan it.</string>
     <string name="plan_now">NOW</string>
     <string name="plan_add_block">Add a block</string>
+    <string name="plan_day">Day</string>
+    <string name="plan_week">Week</string>
+    <string name="plan_week_hint">Tap a task to open it.</string>
+    <string name="plan_week_summary">Total: 4h 40m · 6 sessions</string>
+    <string name="plan_week_free">Free</string>
 
     <!-- Block dialog -->
     <string name="dialog_new_block">New block</string>
