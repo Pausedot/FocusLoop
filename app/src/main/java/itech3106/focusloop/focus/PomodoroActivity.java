@@ -95,6 +95,7 @@ public class PomodoroActivity extends ModuleActivity {
 
         updateTimerUi();
         updateControls();
+        updateSessionChrome();
 
         if (getIntent().getBooleanExtra(Extras.AUTO_START, false)) {
             startTimer();
@@ -185,6 +186,18 @@ public class PomodoroActivity extends ModuleActivity {
                 running ? R.string.cd_pause_timer : R.string.cd_start_timer));
         btnPause.setEnabled(running);
         btnFiveSecond.setEnabled(idle);
+    }
+
+    private void updateSessionChrome() {
+        SessionStore stats = new SessionStore(this);
+        int round = stats.completedToday() % 4 + 1;
+        ((TextView) findViewById(R.id.sessionLabel))
+                .setText(getString(R.string.focus_session_format, round));
+        ((TextView) findViewById(R.id.timerCaption))
+                .setText(getString(R.string.focus_caption_format, Prefs.focusMinutes(this)));
+        ((TextView) findViewById(R.id.focusTodayValue))
+                .setText(getString(R.string.focus_today_format,
+                        stats.today().size(), stats.minutesToday()));
     }
 
     private void onSessionComplete() {
@@ -302,6 +315,7 @@ public class PomodoroActivity extends ModuleActivity {
                 updateControls();
             }
         }
+        updateSessionChrome();
     }
 
     @Override

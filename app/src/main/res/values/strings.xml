@@ -123,10 +123,13 @@
     <string name="focus_task_default">Free focus</string>
     <string name="focus_no_task_meta">Pick a task to link</string>
     <string name="focus_session">SESSION 1 OF 4</string>
+    <string name="focus_session_format">SESSION %1$d OF 4</string>
     <string name="focus_time">25:00</string>
     <string name="focus_five_second">5-second start</string>
     <string name="focus_today_label">TODAY</string>
     <string name="focus_today_value">3 sessions · 70 min</string>
+    <string name="focus_today_format">%1$d sessions · %2$d min</string>
+    <string name="focus_caption_format">%1$d min focus</string>
     <string name="focus_hint">One loop at a time.</string>
     <string name="focus_caption">25 min focus</string>
     <string name="session_complete_title">Session complete</string>
