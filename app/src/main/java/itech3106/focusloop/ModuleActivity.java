@@ -114,6 +114,12 @@ public abstract class ModuleActivity extends BaseActivity {
             startActivity(new Intent(this, ReviewArchiveActivity.class));
             return true;
         }
+        if (id == R.id.action_plan_tomorrow) {
+            Intent intent = new Intent(this, TimeBlocksActivity.class);
+            intent.putExtra(Extras.DAY_OFFSET, 1);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 }

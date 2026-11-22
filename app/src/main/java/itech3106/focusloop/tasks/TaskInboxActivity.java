@@ -67,6 +67,11 @@ public class TaskInboxActivity extends ModuleActivity {
         findViewById(R.id.fabAdd).setOnClickListener(v -> openEditor());
         findViewById(R.id.emptyAction).setOnClickListener(v -> openEditor());
 
+        findViewById(R.id.tabMatrix).setOnClickListener(v ->
+                startActivity(new Intent(this, MatrixActivity.class)));
+        findViewById(R.id.tabDone).setOnClickListener(v ->
+                startActivity(new Intent(this, DoneActivity.class)));
+
         load();
     }
 
@@ -146,6 +151,15 @@ public class TaskInboxActivity extends ModuleActivity {
             default:
                 return 2;
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        boolean created = super.onCreateOptionsMenu(menu);
+        // Module navigation now lives in the chip row; the menu keeps actions only.
+        menu.removeItem(R.id.action_matrix);
+        menu.removeItem(R.id.action_done);
+        return created;
     }
 
     @Override

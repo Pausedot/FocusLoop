@@ -59,6 +59,18 @@
     <string name="cd_restore_task">Restore task</string>
     <string name="inbox_filter_priority">Priority</string>
     <string name="inbox_filter_due">Due date</string>
+    <string name="tab_inbox">Inbox</string>
+    <string name="tab_matrix">Matrix</string>
+    <string name="tab_done">Done</string>
+    <string name="tab_timer">Timer</string>
+    <string name="tab_break">Break</string>
+    <string name="tab_history">History</string>
+    <string name="tab_settings">Settings</string>
+    <string name="tab_plan">Plan</string>
+    <string name="tab_two_minute">2 min</string>
+    <string name="tab_review">Review</string>
+    <string name="tab_stats">Stats</string>
+    <string name="tab_archive">Archive</string>
     <string name="inbox_empty_title">Nothing on the list</string>
     <string name="inbox_empty_body">Add the first thing that comes to mind.</string>
     <string name="inbox_empty_action">Add a task</string>
@@ -305,4 +317,5 @@
     <string name="menu_plan_review">Daily review</string>
     <string name="menu_plan_stats">Statistics</string>
     <string name="menu_plan_archive">Review archive</string>
+    <string name="menu_plan_tomorrow">Plan tomorrow</string>
 </resources>

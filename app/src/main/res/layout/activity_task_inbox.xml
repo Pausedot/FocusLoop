@@ -29,42 +29,53 @@
         android:text="@string/inbox_summary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/moduleTabScroll" />
 
     <HorizontalScrollView
-        android:id="@+id/filterScroll"
+        android:id="@+id/moduleTabScroll"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space_md"
+        android:layout_marginTop="@dimen/space_sm"
         android:clipToPadding="false"
         android:paddingStart="@dimen/screen_margin"
         android:paddingEnd="@dimen/screen_margin"
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inboxSummary">
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/filterGroup"
+            android:id="@+id/moduleTabs"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:selectionRequired="true"
+            app:singleLine="true"
+            app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipPriority"
+                android:id="@+id/tabInbox"
                 style="@style/Widget.FocusLoop.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checkable="true"
                 android:checked="true"
-                android:text="@string/inbox_filter_priority" />
+                android:text="@string/tab_inbox" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipDue"
+                android:id="@+id/tabMatrix"
                 style="@style/Widget.FocusLoop.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checkable="true"
-                android:text="@string/inbox_filter_due" />
+                android:text="@string/tab_matrix" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tabDone"
+                style="@style/Widget.FocusLoop.Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="@string/tab_done" />
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
 
@@ -80,7 +91,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filterScroll"
+        app:layout_constraintTop_toBottomOf="@id/inboxSummary"
         tools:listitem="@layout/item_task" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -93,7 +104,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filterScroll"
+        app:layout_constraintTop_toBottomOf="@id/inboxSummary"
         tools:visibility="gone">
 
         <ImageView

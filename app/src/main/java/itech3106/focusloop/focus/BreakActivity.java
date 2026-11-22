@@ -42,7 +42,7 @@ public class BreakActivity extends BaseActivity {
         ((TextView) findViewById(R.id.breakLength)).setText(
                 getString(R.string.break_length_format, Prefs.breakMinutes(this)));
 
-        findViewById(R.id.skipText).setOnClickListener(v -> backToTimer());
+        findViewById(R.id.btnSkipBreak).setOnClickListener(v -> backToTimer());
 
         updateCount();
         startTimer();

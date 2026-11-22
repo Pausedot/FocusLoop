@@ -16,22 +16,8 @@
         android:layout_marginTop="@dimen/space_xl"
         android:text="@string/break_label"
         android:textColor="@color/accent"
-        app:layout_constraintEnd_toStartOf="@id/skipText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/skipText"
-        style="@style/Text.Caption"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/touch_target"
-        android:layout_marginEnd="@dimen/space_md"
-        android:gravity="center"
-        android:paddingStart="@dimen/space_md"
-        android:paddingEnd="@dimen/space_md"
-        android:text="@string/break_skip"
-        android:textColor="?attr/colorOnSurfaceVariant"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
@@ -82,6 +68,20 @@
             android:gravity="center"
             android:text="@string/break_hint" />
     </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSkipBreak"
+        style="@style/Widget.FocusLoop.Button.Outlined"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="@dimen/screen_margin"
+        android:layout_marginEnd="@dimen/screen_margin"
+        android:layout_marginBottom="@dimen/space_md"
+        android:text="@string/break_skip"
+        app:backgroundTint="@color/surface"
+        app:layout_constraintBottom_toTopOf="@id/breakFooter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/breakFooter"

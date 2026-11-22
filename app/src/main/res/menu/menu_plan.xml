@@ -15,4 +15,7 @@
     <item
         android:id="@+id/action_review_archive"
         android:title="@string/menu_plan_archive" />
+    <item
+        android:id="@+id/action_plan_tomorrow"
+        android:title="@string/menu_plan_tomorrow" />
 </menu>

@@ -56,7 +56,8 @@ public class TimeBlocksActivity extends ModuleActivity {
         bindChrome(R.string.title_plan);
 
         planStore = new PlanStore(this);
-        slots.addAll(planStore.forDay(Dates.today()));
+        dayOffset = getIntent().getIntExtra(Extras.DAY_OFFSET, 0);
+        slots.addAll(planStore.forDay(Dates.today() + dayOffset));
         adapter = new TimeSlotAdapter(slots, currentHour(), this::showBlockDialog);
         slotList = findViewById(R.id.slotList);
         slotList.setLayoutManager(new LinearLayoutManager(this));
@@ -80,6 +81,15 @@ public class TimeBlocksActivity extends ModuleActivity {
 
         btnPrev.setOnClickListener(v -> shift(-1));
         btnNext.setOnClickListener(v -> shift(1));
+
+        findViewById(R.id.tabTwoMinute).setOnClickListener(v ->
+                startActivity(new Intent(this, TwoMinuteActivity.class)));
+        findViewById(R.id.tabReview).setOnClickListener(v ->
+                startActivity(new Intent(this, DailyReviewActivity.class)));
+        findViewById(R.id.tabStats).setOnClickListener(v ->
+                startActivity(new Intent(this, StatsActivity.class)));
+        findViewById(R.id.tabArchive).setOnClickListener(v ->
+                startActivity(new Intent(this, ReviewArchiveActivity.class)));
 
         applyMode();
     }
@@ -219,6 +229,17 @@ public class TimeBlocksActivity extends ModuleActivity {
     @Override
     protected int menuRes() {
         return R.menu.menu_plan;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        boolean created = super.onCreateOptionsMenu(menu);
+        // Destinations are in the chip row; the menu keeps the "plan tomorrow" action.
+        menu.removeItem(R.id.action_two_minute);
+        menu.removeItem(R.id.action_daily_review);
+        menu.removeItem(R.id.action_stats);
+        menu.removeItem(R.id.action_review_archive);
+        return created;
     }
 
     @Override

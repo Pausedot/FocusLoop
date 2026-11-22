@@ -18,6 +18,62 @@
         app:title="@string/title_focus"
         app:titleTextAppearance="@style/Text.Toolbar" />
 
+    <HorizontalScrollView
+        android:id="@+id/moduleTabScroll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_xs"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/screen_margin"
+        android:paddingEnd="@dimen/screen_margin"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/moduleTabs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:selectionRequired="true"
+            app:singleLine="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tabTimer"
+                style="@style/Widget.FocusLoop.Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:checked="true"
+                android:text="@string/tab_timer" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tabBreak"
+                style="@style/Widget.FocusLoop.Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="@string/tab_break" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tabHistory"
+                style="@style/Widget.FocusLoop.Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="@string/tab_history" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/tabSettings"
+                style="@style/Widget.FocusLoop.Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkable="true"
+                android:text="@string/tab_settings" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -26,7 +82,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/moduleTabScroll">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
