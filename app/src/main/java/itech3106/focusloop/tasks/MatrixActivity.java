@@ -2,7 +2,6 @@ package itech3106.focusloop.tasks;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 
 import itech3106.focusloop.Extras;
 import itech3106.focusloop.ModuleActivity;
@@ -37,17 +36,14 @@ public class MatrixActivity extends ModuleActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        boolean created = super.onCreateOptionsMenu(menu);
-        // Sorting belongs to the inbox, not to the matrix board.
-        menu.removeItem(R.id.action_sort_priority);
-        menu.removeItem(R.id.action_sort_due);
-        return created;
+    protected int menuRes() {
+        return R.menu.menu_tasks;
     }
 
     @Override
-    protected int menuRes() {
-        return R.menu.menu_tasks;
+    protected boolean showAction(int id) {
+        // Sorting belongs to the inbox, not to the matrix board.
+        return id != R.id.action_sort_priority && id != R.id.action_sort_due;
     }
 
     @Override

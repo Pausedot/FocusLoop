@@ -318,4 +318,20 @@
     <string name="menu_plan_stats">Statistics</string>
     <string name="menu_plan_archive">Review archive</string>
     <string name="menu_plan_tomorrow">Plan tomorrow</string>
+    <string name="menu_button">Menu</string>
+    <string name="menu_screens_label">SCREENS</string>
+    <string name="menu_actions_label">ACTIONS</string>
+    <string name="menu_current">Current screen</string>
+    <string name="menu_desc_inbox">Everything you captured</string>
+    <string name="menu_desc_matrix">Four quadrants, one frog</string>
+    <string name="menu_desc_done">What you finished</string>
+    <string name="menu_desc_timer">One countdown, three controls</string>
+    <string name="menu_desc_break">Five minutes away from the screen</string>
+    <string name="menu_desc_history">Sessions grouped by day</string>
+    <string name="menu_desc_settings">Lengths, sound and theme</string>
+    <string name="menu_desc_plan">Hour by hour</string>
+    <string name="menu_desc_two">Small things out of the way</string>
+    <string name="menu_desc_review">Three questions at night</string>
+    <string name="menu_desc_stats">Five measures for the week</string>
+    <string name="menu_desc_archive">Past reviews</string>
 </resources>

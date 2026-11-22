@@ -111,6 +111,12 @@ public class DoneActivity extends ModuleActivity {
     }
 
     @Override
+    protected boolean showAction(int id) {
+        // The Done list is already ordered by completion time.
+        return id != R.id.action_sort_priority && id != R.id.action_sort_due;
+    }
+
+    @Override
     protected int selfMenuItem() {
         return R.id.action_done;
     }

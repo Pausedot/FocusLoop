@@ -93,12 +93,6 @@ public class PomodoroActivity extends ModuleActivity {
         btnPause.setOnClickListener(v -> pauseTimer());
         btnFiveSecond.setOnClickListener(v -> openFiveSecond());
 
-        findViewById(R.id.tabBreak).setOnClickListener(v -> openBreak());
-        findViewById(R.id.tabHistory).setOnClickListener(v ->
-                startActivity(new Intent(this, FocusHistoryActivity.class)));
-        findViewById(R.id.tabSettings).setOnClickListener(v ->
-                startActivity(new Intent(this, TimerSettingsActivity.class)));
-
         updateTimerUi();
         updateControls();
         updateSessionChrome();
@@ -340,16 +334,6 @@ public class PomodoroActivity extends ModuleActivity {
     @Override
     protected int menuRes() {
         return R.menu.menu_focus;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(android.view.Menu menu) {
-        boolean created = super.onCreateOptionsMenu(menu);
-        // Destinations are in the chip row; the menu keeps the start action only.
-        menu.removeItem(R.id.action_break);
-        menu.removeItem(R.id.action_history);
-        menu.removeItem(R.id.action_timer_settings);
-        return created;
     }
 
     @Override
