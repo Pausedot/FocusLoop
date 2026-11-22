@@ -22,12 +22,14 @@ import itech3106.focusloop.R;
 import itech3106.focusloop.adapter.TaskAdapter;
 import itech3106.focusloop.data.DemoData;
 import itech3106.focusloop.data.Task;
+import itech3106.focusloop.data.TaskStore;
 
 public class TaskInboxActivity extends ModuleActivity {
 
     private final List<Task> tasks = new ArrayList<>();
     private final List<Object> rows = new ArrayList<>();
 
+    private TaskStore store;
     private TaskAdapter adapter;
     private RecyclerView list;
     private View emptyState;
@@ -38,8 +40,7 @@ public class TaskInboxActivity extends ModuleActivity {
         setContentView(R.layout.activity_task_inbox);
         bindChrome(R.string.title_tasks);
 
-        tasks.addAll(DemoData.tasks());
-        rows.addAll(DemoData.groupRows(tasks));
+        store = new TaskStore(this);
 
         list = findViewById(R.id.taskList);
         emptyState = findViewById(R.id.emptyState);
@@ -53,6 +54,12 @@ public class TaskInboxActivity extends ModuleActivity {
             public void onTaskLongClick(Task task) {
                 confirmDelete(task);
             }
+
+            @Override
+            public void onTaskChecked(Task task, boolean checked) {
+                store.setDone(task.id, checked);
+                load();
+            }
         });
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
@@ -60,18 +67,20 @@ public class TaskInboxActivity extends ModuleActivity {
         findViewById(R.id.fabAdd).setOnClickListener(v -> openEditor());
         findViewById(R.id.emptyAction).setOnClickListener(v -> openEditor());
 
-        updateSummary();
-        updateEmptyState();
+        load();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (adapter == null) {
-            return;
+        if (adapter != null) {
+            load();
         }
+    }
+
+    private void load() {
         tasks.clear();
-        tasks.addAll(DemoData.tasks());
+        tasks.addAll(store.open());
         rebuildRows();
         updateSummary();
     }
@@ -79,7 +88,6 @@ public class TaskInboxActivity extends ModuleActivity {
     private void openDetail(Task task) {
         Intent intent = new Intent(this, TaskDetailActivity.class);
         intent.putExtra(Extras.TASK_ID, task.id);
-        intent.putExtra(Extras.TASK_TITLE, task.title);
         startActivity(intent);
     }
 
@@ -92,9 +100,8 @@ public class TaskInboxActivity extends ModuleActivity {
                 .setTitle(R.string.delete_task_title)
                 .setMessage(getString(R.string.delete_task_body, task.title))
                 .setPositiveButton(R.string.action_delete, (dialog, which) -> {
-                    tasks.remove(task);
-                    rebuildRows();
-                    updateSummary();
+                    store.remove(task.id);
+                    load();
                 })
                 .setNegativeButton(R.string.action_cancel, null)
                 .show();

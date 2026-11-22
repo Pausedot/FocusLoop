@@ -96,6 +96,19 @@ public class SessionStore extends JsonStore<FocusSession> {
         return minutes;
     }
 
+    public int countForTask(String taskId) {
+        if (taskId == null) {
+            return 0;
+        }
+        int count = 0;
+        for (FocusSession session : all()) {
+            if (taskId.equals(session.taskId)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public void record(FocusSession session) {
         add(session);
     }

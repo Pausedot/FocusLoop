@@ -7,14 +7,15 @@ import android.widget.TextView;
 import itech3106.focusloop.Extras;
 import itech3106.focusloop.ModuleActivity;
 import itech3106.focusloop.R;
-import itech3106.focusloop.data.DemoData;
-import itech3106.focusloop.data.FocusSession;
+import itech3106.focusloop.data.SessionStore;
 import itech3106.focusloop.data.Task;
+import itech3106.focusloop.data.TaskStore;
 import itech3106.focusloop.focus.PomodoroActivity;
 
 public class TaskDetailActivity extends ModuleActivity {
 
     private Task task;
+    private TaskStore store;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,12 +23,15 @@ public class TaskDetailActivity extends ModuleActivity {
         setContentView(R.layout.activity_task_detail);
         bindChrome(R.string.title_task);
 
+        store = new TaskStore(this);
         String taskId = getIntent().getStringExtra(Extras.TASK_ID);
-        task = DemoData.task(taskId == null ? "t1" : taskId);
+        task = taskId == null ? null : store.byId(taskId);
+        if (task == null) {
+            finish();
+            return;
+        }
 
-        String title = getIntent().getStringExtra(Extras.TASK_TITLE);
-        TextView titleView = findViewById(R.id.detailTitle);
-        titleView.setText(title == null ? task.title : title);
+        ((TextView) findViewById(R.id.detailTitle)).setText(task.title);
 
         TextView badge = findViewById(R.id.detailBadge);
         badge.setText(String.valueOf(task.priority));
@@ -38,32 +42,24 @@ public class TaskDetailActivity extends ModuleActivity {
         TextView quadrant = findViewById(R.id.detailQuadrant);
         quadrant.setText(task.quadrant + " · " + getString(quadrantLabel(task.quadrant)));
 
-        TextView due = findViewById(R.id.detailDue);
-        due.setText(task.due);
+        ((TextView) findViewById(R.id.detailDue)).setText(task.due);
+        ((TextView) findViewById(R.id.detailNotes)).setText(task.notes);
 
-        TextView notes = findViewById(R.id.detailNotes);
-        notes.setText(task.notes);
-
-        int sessions = 0;
-        int minutes = 0;
-        for (FocusSession session : DemoData.sessions()) {
-            if (session.title.equals(task.title)) {
-                sessions++;
-                minutes += session.minutes;
-            }
-        }
+        SessionStore sessions = new SessionStore(this);
+        int count = sessions.countForTask(task.id);
+        int minutes = sessions.minutesForTask(task.id);
         String focusValue = getResources().getQuantityString(
-                R.plurals.detail_sessions, sessions, sessions) + " · " + minutes + " min";
+                R.plurals.detail_sessions, count, count) + " · " + minutes + " min";
         ((TextView) findViewById(R.id.detailFocusValue)).setText(focusValue);
 
         findViewById(R.id.btnStartFocus).setOnClickListener(v -> {
             Intent intent = new Intent(this, PomodoroActivity.class);
             intent.putExtra(Extras.TASK_ID, task.id);
-            intent.putExtra(Extras.TASK_TITLE, titleView.getText().toString());
+            intent.putExtra(Extras.TASK_TITLE, task.title);
             startActivity(intent);
         });
         findViewById(R.id.btnComplete).setOnClickListener(v -> {
-            DemoData.setDone(task.id, true);
+            store.setDone(task.id, true);
             finish();
         });
     }

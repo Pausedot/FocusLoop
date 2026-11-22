@@ -15,9 +15,8 @@ import itech3106.focusloop.Extras;
 import itech3106.focusloop.ModuleActivity;
 import itech3106.focusloop.R;
 import itech3106.focusloop.adapter.SessionAdapter;
-import itech3106.focusloop.data.DemoData;
 import itech3106.focusloop.data.FocusSession;
-import itech3106.focusloop.data.Task;
+import itech3106.focusloop.data.SessionStore;
 import itech3106.focusloop.tasks.TaskDetailActivity;
 
 public class FocusHistoryActivity extends ModuleActivity {
@@ -28,33 +27,42 @@ public class FocusHistoryActivity extends ModuleActivity {
         setContentView(R.layout.activity_focus_history);
         bindChrome(R.string.title_history);
 
-        List<Object> rows = DemoData.sessionRows();
-        SessionAdapter adapter = new SessionAdapter(rows, this::openTask);
+        SessionStore store = new SessionStore(this);
+        List<Object> rows = groupRows(store.recent());
+        SessionAdapter adapter = new SessionAdapter(rows, this::openSession);
         RecyclerView list = findViewById(R.id.sessionList);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
 
-        int sessions = 0;
-        int minutes = 0;
-        for (FocusSession session : DemoData.sessions()) {
-            if ("26 OCT".equals(session.group)) {
-                sessions++;
-                minutes += session.minutes;
-            }
-        }
-        ((TextView) findViewById(R.id.historySessionsValue)).setText(String.valueOf(sessions));
-        ((TextView) findViewById(R.id.historyMinutesValue)).setText(String.valueOf(minutes));
+        ((TextView) findViewById(R.id.historySessionsValue))
+                .setText(String.valueOf(store.today().size()));
+        ((TextView) findViewById(R.id.historyMinutesValue))
+                .setText(String.valueOf(store.minutesToday()));
 
         boolean isEmpty = rows.isEmpty();
         list.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
         findViewById(R.id.emptyState).setVisibility(isEmpty ? View.VISIBLE : View.GONE);
     }
 
-    private void openTask(FocusSession session) {
-        Task task = DemoData.taskByTitle(session.title);
+    private static List<Object> groupRows(List<FocusSession> sessions) {
+        List<Object> rows = new ArrayList<>();
+        String group = null;
+        for (FocusSession session : sessions) {
+            if (!session.group.equals(group)) {
+                group = session.group;
+                rows.add(group);
+            }
+            rows.add(session);
+        }
+        return rows;
+    }
+
+    private void openSession(FocusSession session) {
+        if (session.taskId == null) {
+            return;
+        }
         Intent intent = new Intent(this, TaskDetailActivity.class);
-        intent.putExtra(Extras.TASK_ID, task.id);
-        intent.putExtra(Extras.TASK_TITLE, task.title);
+        intent.putExtra(Extras.TASK_ID, session.taskId);
         startActivity(intent);
     }
 

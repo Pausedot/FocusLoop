@@ -25,7 +25,9 @@ import itech3106.focusloop.ModuleActivity;
 import itech3106.focusloop.R;
 import itech3106.focusloop.adapter.TimeSlotAdapter;
 import itech3106.focusloop.adapter.WeekAdapter;
+import itech3106.focusloop.data.Dates;
 import itech3106.focusloop.data.DemoData;
+import itech3106.focusloop.data.PlanStore;
 import itech3106.focusloop.data.TimeSlot;
 import itech3106.focusloop.data.WeekDay;
 import itech3106.focusloop.tasks.TaskDetailActivity;
@@ -35,6 +37,7 @@ public class TimeBlocksActivity extends ModuleActivity {
 
     private final List<TimeSlot> slots = new ArrayList<>();
     private TimeSlotAdapter adapter;
+    private PlanStore planStore;
     private RecyclerView slotList;
     private RecyclerView weekList;
     private TextView weekSummary;
@@ -52,8 +55,9 @@ public class TimeBlocksActivity extends ModuleActivity {
         setContentView(R.layout.activity_time_blocks);
         bindChrome(R.string.title_plan);
 
-        slots.addAll(DemoData.slots());
-        adapter = new TimeSlotAdapter(slots, this::showBlockDialog);
+        planStore = new PlanStore(this);
+        slots.addAll(planStore.forDay(Dates.today()));
+        adapter = new TimeSlotAdapter(slots, currentHour(), this::showBlockDialog);
         slotList = findViewById(R.id.slotList);
         slotList.setLayoutManager(new LinearLayoutManager(this));
         slotList.setAdapter(adapter);
@@ -85,8 +89,20 @@ public class TimeBlocksActivity extends ModuleActivity {
             weekOffset += direction;
         } else {
             dayOffset += direction;
+            loadDay();
         }
         updateHeader();
+    }
+
+    private void loadDay() {
+        slots.clear();
+        slots.addAll(planStore.forDay(Dates.today() + dayOffset));
+        adapter.notifyDataSetChanged();
+    }
+
+    private static String currentHour() {
+        return String.format(Locale.ENGLISH, "%02d:00",
+                Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
     }
 
     private void applyMode() {
@@ -180,14 +196,14 @@ public class TimeBlocksActivity extends ModuleActivity {
                     }
                     slot.title = text;
                     slot.meta = getString(R.string.block_meta_format, slot.hour);
+                    planStore.save(slot);
                     adapter.notifyItemChanged(slots.indexOf(slot));
                 })
                 .setNegativeButton(R.string.action_cancel, null);
 
         if (slot.title != null) {
             builder.setNeutralButton(R.string.action_delete_block, (dialog, which) -> {
-                slot.title = null;
-                slot.meta = null;
+                planStore.clear(slot);
                 adapter.notifyItemChanged(slots.indexOf(slot));
             });
         }

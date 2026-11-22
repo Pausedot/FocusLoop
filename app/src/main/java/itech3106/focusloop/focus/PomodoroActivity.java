@@ -29,13 +29,15 @@ import itech3106.focusloop.MainActivity;
 import itech3106.focusloop.ModuleActivity;
 import itech3106.focusloop.R;
 import itech3106.focusloop.data.DemoData;
+import itech3106.focusloop.data.FocusSession;
+import itech3106.focusloop.data.Prefs;
+import itech3106.focusloop.data.SessionStore;
 import itech3106.focusloop.data.Task;
 import itech3106.focusloop.tasks.TaskDetailActivity;
 import itech3106.focusloop.tasks.TaskInboxActivity;
 
 public class PomodoroActivity extends ModuleActivity {
 
-    private static final long SESSION_MS = 25 * 60 * 1000L;
     private static final String CHANNEL_ID = "focus_sessions";
     private static final int NOTIFICATION_ID = 1001;
     private static final int REQUEST_NOTIFICATIONS = 2001;
@@ -47,7 +49,8 @@ public class PomodoroActivity extends ModuleActivity {
     private MaterialButton btnFiveSecond;
 
     private CountDownTimer timer;
-    private long remainingMs = SESSION_MS;
+    private long sessionMs;
+    private long remainingMs;
     private boolean running;
     private String taskTitle;
     private String taskId;
@@ -57,6 +60,9 @@ public class PomodoroActivity extends ModuleActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pomodoro);
         bindChrome(R.string.title_focus);
+
+        sessionMs = Prefs.focusMinutes(this) * 60_000L;
+        remainingMs = sessionMs;
 
         taskTitle = getIntent().getStringExtra(Extras.TASK_TITLE);
         taskId = getIntent().getStringExtra(Extras.TASK_ID);
@@ -101,10 +107,10 @@ public class PomodoroActivity extends ModuleActivity {
             return;
         }
         if (remainingMs == 0) {
-            remainingMs = SESSION_MS;
+            remainingMs = sessionMs;
             updateTimerUi();
         }
-        if (remainingMs < SESSION_MS) {
+        if (remainingMs < sessionMs) {
             startTimer();
         } else {
             openFiveSecond();
@@ -156,7 +162,7 @@ public class PomodoroActivity extends ModuleActivity {
             timer = null;
         }
         running = false;
-        remainingMs = SESSION_MS;
+        remainingMs = sessionMs;
         updateTimerUi();
         updateControls();
     }
@@ -167,12 +173,13 @@ public class PomodoroActivity extends ModuleActivity {
         int seconds = totalSeconds % 60;
         timerText.setText(String.format(Locale.ENGLISH, "%02d:%02d", minutes, seconds));
 
-        int progress = (int) Math.round(remainingMs * 100.0 / SESSION_MS);
+        int progress = sessionMs == 0 ? 0
+                : (int) Math.round(remainingMs * 100.0 / sessionMs);
         ringProgress.setProgressCompat(progress, true);
     }
 
     private void updateControls() {
-        boolean idle = !running && remainingMs == SESSION_MS;
+        boolean idle = !running && remainingMs == sessionMs;
         btnPlay.setImageResource(running ? R.drawable.ic_pause : R.drawable.ic_play_arrow);
         btnPlay.setContentDescription(getString(
                 running ? R.string.cd_pause_timer : R.string.cd_start_timer));
@@ -181,8 +188,24 @@ public class PomodoroActivity extends ModuleActivity {
     }
 
     private void onSessionComplete() {
+        recordSession(true);
         showCompletionDialog();
         postCompletionNotification();
+    }
+
+    private void recordSession(boolean completed) {
+        SessionStore store = new SessionStore(this);
+        String title = taskTitle == null ? getString(R.string.focus_task_default) : taskTitle;
+        int minutes = Math.max(1, Math.round(sessionMs / 60_000f));
+        int round = store.completedToday() + 1;
+        store.record(new FocusSession(
+                "s-" + System.currentTimeMillis(),
+                System.currentTimeMillis() - sessionMs,
+                taskId,
+                title,
+                minutes,
+                completed,
+                round));
     }
 
     private void showCompletionDialog() {
@@ -191,7 +214,7 @@ public class PomodoroActivity extends ModuleActivity {
                 .setMessage(R.string.session_complete_message)
                 .setCancelable(false)
                 .setPositiveButton(R.string.session_start_another, (dialog, which) -> {
-                    remainingMs = SESSION_MS;
+                    remainingMs = sessionMs;
                     updateTimerUi();
                     startTimer();
                 })
@@ -224,7 +247,8 @@ public class PomodoroActivity extends ModuleActivity {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(getString(R.string.notification_title))
-                .setContentText(getString(R.string.notification_text_format, label, 25))
+                .setContentText(getString(R.string.notification_text_format, label,
+                        Math.round(sessionMs / 60_000f)))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true)
                 .setContentIntent(pending);
@@ -263,6 +287,21 @@ public class PomodoroActivity extends ModuleActivity {
             intent.putExtra(Extras.TASK_TITLE, taskTitle);
         }
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // The settings screen may have changed the length while this timer was idle.
+        if (!running && remainingMs == sessionMs) {
+            long updated = Prefs.focusMinutes(this) * 60_000L;
+            if (updated != sessionMs) {
+                sessionMs = updated;
+                remainingMs = updated;
+                updateTimerUi();
+                updateControls();
+            }
+        }
     }
 
     @Override

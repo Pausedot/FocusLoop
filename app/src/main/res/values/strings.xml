@@ -22,6 +22,9 @@
     <string name="main_frog_title">Redesign the case study layout</string>
     <string name="main_frog_meta">A · Due today</string>
     <string name="main_frog_start">Start focus</string>
+    <string name="main_frog_empty">Pick a task from the matrix</string>
+    <string name="main_next_empty">Nothing planned yet</string>
+    <string name="main_next_empty_time">—</string>
     <string name="main_next_label">NEXT BLOCK</string>
     <string name="main_next_time">10:00 – 11:00</string>
     <string name="main_next_title">Redesign case study</string>
@@ -29,6 +32,10 @@
     <string name="main_focus_minutes">70</string>
     <string name="main_focus_unit">min</string>
     <string name="main_focus_sessions">3 sessions</string>
+    <plurals name="main_focus_sessions_count">
+        <item quantity="one">%d session</item>
+        <item quantity="other">%d sessions</item>
+    </plurals>
     <string name="main_modules_label">MODULES</string>
     <string name="main_tasks_title">Tasks</string>
     <string name="main_tasks_sub">Inbox, matrix, priorities</string>
@@ -241,6 +248,14 @@
     <string name="stats_total_label">TOTAL THIS WEEK</string>
     <string name="stats_total_value">12h 30m focused</string>
     <string name="stats_delta">+18% vs last week</string>
+    <string name="stats_duration_hm">%1$dh %2$02dm</string>
+    <string name="stats_duration_m">%1$dm</string>
+    <string name="stats_total_value_format">%1$s focused</string>
+    <string name="stats_percent_format">%1$d%%</string>
+    <string name="stats_delta_up">+%1$d%% vs last week</string>
+    <string name="stats_delta_down">−%1$d%% vs last week</string>
+    <string name="stats_delta_same">Same as last week</string>
+    <string name="stats_delta_none">No focus last week</string>
 
     <!-- Menus -->
     <string name="menu_tasks_inbox">Task inbox</string>

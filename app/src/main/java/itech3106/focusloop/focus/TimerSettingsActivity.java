@@ -3,11 +3,14 @@ package itech3106.focusloop.focus;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.slider.Slider;
 
 import itech3106.focusloop.ModuleActivity;
 import itech3106.focusloop.R;
+import itech3106.focusloop.data.Prefs;
 
 public class TimerSettingsActivity extends ModuleActivity {
 
@@ -36,17 +39,46 @@ public class TimerSettingsActivity extends ModuleActivity {
         breakSlider.addOnChangeListener((slider, value, fromUser) ->
                 breakValue.setText(getString(R.string.settings_value_format, (int) value)));
 
+        load();
+
         findViewById(R.id.btnRestore).setOnClickListener(v -> restoreDefaults());
-        findViewById(R.id.btnSaveSettings).setOnClickListener(v -> finish());
+        findViewById(R.id.btnSaveSettings).setOnClickListener(v -> save());
+    }
+
+    private void load() {
+        int focus = Prefs.focusMinutes(this);
+        int pause = Prefs.breakMinutes(this);
+        focusSlider.setValue(focus);
+        breakSlider.setValue(pause);
+        focusValue.setText(getString(R.string.settings_value_format, focus));
+        breakValue.setText(getString(R.string.settings_value_format, pause));
+        soundSwitch.setChecked(Prefs.soundEnabled(this));
+        darkSwitch.setChecked(Prefs.darkMode(this));
     }
 
     private void restoreDefaults() {
-        focusSlider.setValue(25f);
-        breakSlider.setValue(5f);
+        focusSlider.setValue(Prefs.DEFAULT_FOCUS);
+        breakSlider.setValue(Prefs.DEFAULT_BREAK);
         soundSwitch.setChecked(true);
         darkSwitch.setChecked(false);
-        focusValue.setText(R.string.settings_focus_value);
-        breakValue.setText(R.string.settings_break_value);
+        focusValue.setText(getString(R.string.settings_value_format, Prefs.DEFAULT_FOCUS));
+        breakValue.setText(getString(R.string.settings_value_format, Prefs.DEFAULT_BREAK));
+    }
+
+    private void save() {
+        Prefs.setFocusMinutes(this, Math.round(focusSlider.getValue()));
+        Prefs.setBreakMinutes(this, Math.round(breakSlider.getValue()));
+        Prefs.setSoundEnabled(this, soundSwitch.isChecked());
+
+        boolean dark = darkSwitch.isChecked();
+        boolean changed = dark != Prefs.darkMode(this);
+        Prefs.setDarkMode(this, dark);
+        if (changed) {
+            AppCompatDelegate.setDefaultNightMode(dark
+                    ? AppCompatDelegate.MODE_NIGHT_YES
+                    : AppCompatDelegate.MODE_NIGHT_NO);
+        }
+        finish();
     }
 
     @Override

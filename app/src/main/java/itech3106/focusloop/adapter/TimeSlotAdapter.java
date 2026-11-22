@@ -14,20 +14,20 @@ import java.util.List;
 import itech3106.focusloop.R;
 import itech3106.focusloop.data.TimeSlot;
 
-/** The hour timeline. Empty hours show an add affordance, 10:00 is marked as now for the demo. */
+/** The hour timeline. Empty hours show an add affordance, the current hour is marked. */
 public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.Holder> {
 
     public interface OnSlotClick {
         void onSlotClick(TimeSlot slot);
     }
 
-    private static final String NOW_HOUR = "10:00";
-
     private final List<TimeSlot> slots;
+    private final String nowHour;
     private final OnSlotClick listener;
 
-    public TimeSlotAdapter(List<TimeSlot> slots, OnSlotClick listener) {
+    public TimeSlotAdapter(List<TimeSlot> slots, String nowHour, OnSlotClick listener) {
         this.slots = slots;
+        this.nowHour = nowHour;
         this.listener = listener;
     }
 
@@ -42,7 +42,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.Holder
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         TimeSlot slot = slots.get(position);
-        boolean isNow = NOW_HOUR.equals(slot.hour);
+        boolean isNow = nowHour.equals(slot.hour);
         boolean filled = slot.title != null;
 
         holder.hour.setText(slot.hour);

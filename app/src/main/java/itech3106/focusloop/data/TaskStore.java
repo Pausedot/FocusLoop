@@ -121,4 +121,15 @@ public class TaskStore extends JsonStore<Task> {
         }
         return due;
     }
+
+    public List<Task> completedOn(int epochDay) {
+        List<Task> completed = new ArrayList<>();
+        for (Task task : all()) {
+            if (task.done && task.completedAt > 0
+                    && Dates.epochDay(task.completedAt) == epochDay) {
+                completed.add(task);
+            }
+        }
+        return completed;
+    }
 }
