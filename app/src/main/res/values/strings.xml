@@ -48,6 +48,15 @@
     <string name="title_tasks">Tasks</string>
     <string name="inbox_summary">8 open · 3 due today</string>
     <string name="inbox_summary_format">%1$d open · %2$d due today</string>
+    <string name="title_done">Done</string>
+    <string name="done_summary_format">%1$d done · %2$d min focused</string>
+    <string name="done_focus_format">%1$d min focused</string>
+    <string name="done_restore">Restore</string>
+    <string name="done_empty_title">Nothing finished yet</string>
+    <string name="done_empty_body">Complete a task and it lands here.</string>
+    <string name="done_today">TODAY</string>
+    <string name="done_yesterday">YESTERDAY</string>
+    <string name="cd_restore_task">Restore task</string>
     <string name="inbox_filter_priority">Priority</string>
     <string name="inbox_filter_due">Due date</string>
     <string name="inbox_empty_title">Nothing on the list</string>
@@ -130,6 +139,18 @@
     <string name="focus_today_value">3 sessions · 70 min</string>
     <string name="focus_today_format">%1$d sessions · %2$d min</string>
     <string name="focus_caption_format">%1$d min focus</string>
+    <string name="title_break">Break</string>
+    <string name="menu_focus_break">Take a break</string>
+    <string name="break_label">BREAK</string>
+    <string name="break_skip">Skip break</string>
+    <string name="break_hint">Stand up. Look away.</string>
+    <string name="break_footer">Back to focus when you are ready.</string>
+    <string name="break_length_format">%1$d min break</string>
+    <string name="break_end_title">Break over</string>
+    <string name="break_end_message">Ready for the next session?</string>
+    <string name="break_next_focus">Start next focus</string>
+    <string name="break_done">Done for now</string>
+    <string name="session_take_break">Take a break</string>
     <string name="focus_hint">One loop at a time.</string>
     <string name="focus_caption">25 min focus</string>
     <string name="session_complete_title">Session complete</string>
@@ -164,6 +185,7 @@
     <string name="five_skip">Skip</string>
     <string name="five_count">5</string>
     <string name="five_go">GO</string>
+    <string name="five_starting">Starting your session…</string>
     <string name="five_task_fallback">Redesign the case study layout</string>
 
     <!-- Focus history -->
@@ -229,6 +251,13 @@
     <string name="hint_review_q2">Name the friction, not the feeling</string>
     <string name="hint_review_q3">Small enough to actually start</string>
     <string name="review_view_stats">View statistics</string>
+    <string name="title_review_archive">Review archive</string>
+    <string name="archive_summary_format">%1$d reviews</string>
+    <string name="archive_empty_title">No reviews yet</string>
+    <string name="archive_empty_body">Save a daily review and it appears here.</string>
+    <string name="archive_tomorrow_label">TOMORROW’S ONE THING</string>
+    <string name="archive_went_well_label">WENT WELL</string>
+    <string name="archive_obstacle_label">GOT IN THE WAY</string>
 
     <!-- Statistics -->
     <string name="title_stats">Statistics</string>
@@ -264,6 +293,7 @@
     <string name="menu_tasks_inbox">Task inbox</string>
     <string name="menu_tasks_new">New task</string>
     <string name="menu_tasks_matrix">Matrix</string>
+    <string name="menu_tasks_done">Done</string>
     <string name="menu_tasks_sort_priority">Sort by priority</string>
     <string name="menu_tasks_sort_due">Sort by due date</string>
     <string name="menu_focus_pomodoro">Pomodoro</string>
@@ -274,4 +304,5 @@
     <string name="menu_plan_two">2-minute list</string>
     <string name="menu_plan_review">Daily review</string>
     <string name="menu_plan_stats">Statistics</string>
+    <string name="menu_plan_archive">Review archive</string>
 </resources>

@@ -226,11 +226,7 @@ public class PomodoroActivity extends ModuleActivity {
                 .setTitle(R.string.session_complete_title)
                 .setMessage(R.string.session_complete_message)
                 .setCancelable(false)
-                .setPositiveButton(R.string.session_start_another, (dialog, which) -> {
-                    remainingMs = sessionMs;
-                    updateTimerUi();
-                    startTimer();
-                })
+                .setPositiveButton(R.string.session_take_break, (dialog, which) -> openBreak())
                 .setNegativeButton(R.string.session_back_to_task, (dialog, which) -> {
                     if (taskId != null) {
                         Intent intent = new Intent(this, TaskDetailActivity.class);
@@ -241,6 +237,14 @@ public class PomodoroActivity extends ModuleActivity {
                     finish();
                 })
                 .show();
+    }
+
+    private void openBreak() {
+        Intent intent = new Intent(this, BreakActivity.class);
+        intent.putExtra(Extras.TASK_ID, taskId);
+        intent.putExtra(Extras.TASK_TITLE, taskTitle);
+        startActivity(intent);
+        finish();
     }
 
     @SuppressLint("MissingPermission")

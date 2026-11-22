@@ -19,6 +19,7 @@ public class FiveSecondActivity extends BaseActivity {
     private TextView countText;
     private View[] dots;
     private int count = 5;
+    private boolean launched;
 
     private final Runnable tick = new Runnable() {
         @Override
@@ -34,6 +35,9 @@ public class FiveSecondActivity extends BaseActivity {
                 countText.setTextSize(140f);
                 countText.setTextColor(ContextCompat.getColor(FiveSecondActivity.this,
                         R.color.accent_on_dark));
+                ((TextView) findViewById(R.id.fiveHint)).setText(R.string.five_starting);
+                // GO starts the session; the short pause lets the state be seen.
+                handler.postDelayed(() -> openPomodoro(true), 600);
             }
         }
     };
@@ -66,6 +70,10 @@ public class FiveSecondActivity extends BaseActivity {
     }
 
     private void openPomodoro(boolean autoStart) {
+        if (launched) {
+            return;
+        }
+        launched = true;
         Intent intent = new Intent(this, PomodoroActivity.class);
         intent.putExtra(Extras.TASK_ID, getIntent().getStringExtra(Extras.TASK_ID));
         intent.putExtra(Extras.TASK_TITLE, getIntent().getStringExtra(Extras.TASK_TITLE));

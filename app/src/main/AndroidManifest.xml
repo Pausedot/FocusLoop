@@ -37,6 +37,9 @@
             android:name=".tasks.MatrixActivity"
             android:exported="false" />
         <activity
+            android:name=".tasks.DoneActivity"
+            android:exported="false" />
+        <activity
             android:name=".tasks.TaskDetailActivity"
             android:exported="false" />
 
@@ -49,6 +52,9 @@
             android:exported="false" />
         <activity
             android:name=".focus.FiveSecondActivity"
+            android:exported="false" />
+        <activity
+            android:name=".focus.BreakActivity"
             android:exported="false" />
         <activity
             android:name=".focus.FocusHistoryActivity"
@@ -68,6 +74,9 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".planning.StatsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".planning.ReviewArchiveActivity"
             android:exported="false" />
     </application>
 

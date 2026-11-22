@@ -7,6 +7,9 @@
         android:id="@+id/action_five_second"
         android:title="@string/menu_focus_five" />
     <item
+        android:id="@+id/action_break"
+        android:title="@string/menu_focus_break" />
+    <item
         android:id="@+id/action_history"
         android:title="@string/menu_focus_history" />
     <item

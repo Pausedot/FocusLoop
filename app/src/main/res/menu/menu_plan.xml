@@ -12,4 +12,7 @@
     <item
         android:id="@+id/action_stats"
         android:title="@string/menu_plan_stats" />
+    <item
+        android:id="@+id/action_review_archive"
+        android:title="@string/menu_plan_archive" />
 </menu>

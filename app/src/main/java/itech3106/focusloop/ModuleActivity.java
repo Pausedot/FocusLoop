@@ -4,15 +4,18 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import itech3106.focusloop.focus.BreakActivity;
 import itech3106.focusloop.focus.FiveSecondActivity;
 import itech3106.focusloop.focus.FocusHistoryActivity;
 import itech3106.focusloop.focus.PomodoroActivity;
 import itech3106.focusloop.focus.TimerSettingsActivity;
 import itech3106.focusloop.planning.DailyReviewActivity;
+import itech3106.focusloop.planning.ReviewArchiveActivity;
 import itech3106.focusloop.planning.StatsActivity;
 import itech3106.focusloop.planning.TimeBlocksActivity;
 import itech3106.focusloop.planning.TwoMinuteActivity;
 import itech3106.focusloop.tasks.MatrixActivity;
+import itech3106.focusloop.tasks.DoneActivity;
 import itech3106.focusloop.tasks.TaskEditActivity;
 import itech3106.focusloop.tasks.TaskInboxActivity;
 
@@ -54,6 +57,10 @@ public abstract class ModuleActivity extends BaseActivity {
             startActivity(new Intent(this, MatrixActivity.class));
             return true;
         }
+        if (id == R.id.action_done) {
+            startActivity(new Intent(this, DoneActivity.class));
+            return true;
+        }
         if (id == R.id.action_edit) {
             Intent intent = new Intent(this, TaskEditActivity.class);
             intent.putExtra(Extras.TASK_ID, getIntent().getStringExtra(Extras.TASK_ID));
@@ -67,6 +74,13 @@ public abstract class ModuleActivity extends BaseActivity {
         }
         if (id == R.id.action_five_second) {
             Intent intent = new Intent(this, FiveSecondActivity.class);
+            intent.putExtra(Extras.TASK_ID, getIntent().getStringExtra(Extras.TASK_ID));
+            intent.putExtra(Extras.TASK_TITLE, getIntent().getStringExtra(Extras.TASK_TITLE));
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.action_break) {
+            Intent intent = new Intent(this, BreakActivity.class);
             intent.putExtra(Extras.TASK_ID, getIntent().getStringExtra(Extras.TASK_ID));
             intent.putExtra(Extras.TASK_TITLE, getIntent().getStringExtra(Extras.TASK_TITLE));
             startActivity(intent);
@@ -94,6 +108,10 @@ public abstract class ModuleActivity extends BaseActivity {
         }
         if (id == R.id.action_stats) {
             startActivity(new Intent(this, StatsActivity.class));
+            return true;
+        }
+        if (id == R.id.action_review_archive) {
+            startActivity(new Intent(this, ReviewArchiveActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
