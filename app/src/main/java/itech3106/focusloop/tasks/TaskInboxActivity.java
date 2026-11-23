@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,7 +26,7 @@ import itech3106.focusloop.data.DemoData;
 import itech3106.focusloop.data.Task;
 import itech3106.focusloop.data.TaskStore;
 
-public class TaskInboxActivity extends ModuleActivity {
+public class TaskInboxActivity extends ModuleActivity implements TaskDetailFragment.Listener {
 
     private final List<Task> tasks = new ArrayList<>();
     private final List<Object> rows = new ArrayList<>();
@@ -33,6 +35,8 @@ public class TaskInboxActivity extends ModuleActivity {
     private TaskAdapter adapter;
     private RecyclerView list;
     private View emptyState;
+    private FrameLayout detailContainer;
+    private View detailPlaceholder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,8 @@ public class TaskInboxActivity extends ModuleActivity {
         bindChrome(R.string.title_tasks);
 
         store = new TaskStore(this);
+        detailContainer = findViewById(R.id.detailContainer);
+        detailPlaceholder = findViewById(R.id.detailPlaceholder);
 
         list = findViewById(R.id.taskList);
         emptyState = findViewById(R.id.emptyState);
@@ -59,6 +65,9 @@ public class TaskInboxActivity extends ModuleActivity {
             public void onTaskChecked(Task task, boolean checked) {
                 store.setDone(task.id, checked);
                 load();
+                if (checked && isShowing(task.id)) {
+                    clearDetail();
+                }
             }
         });
         list.setLayoutManager(new LinearLayoutManager(this));
@@ -67,14 +76,25 @@ public class TaskInboxActivity extends ModuleActivity {
         findViewById(R.id.fabAdd).setOnClickListener(v -> openEditor());
         findViewById(R.id.emptyAction).setOnClickListener(v -> openEditor());
 
+        if (detailContainer != null
+                && getSupportFragmentManager().findFragmentByTag("detail") != null
+                && detailPlaceholder != null) {
+            detailPlaceholder.setVisibility(View.GONE);
+        }
+
         load();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (adapter != null) {
-            load();
+        if (adapter == null) {
+            return;
+        }
+        load();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("detail");
+        if (fragment instanceof TaskDetailFragment) {
+            ((TaskDetailFragment) fragment).reload();
         }
     }
 
@@ -86,9 +106,35 @@ public class TaskInboxActivity extends ModuleActivity {
     }
 
     private void openDetail(Task task) {
-        Intent intent = new Intent(this, TaskDetailActivity.class);
-        intent.putExtra(Extras.TASK_ID, task.id);
-        startActivity(intent);
+        if (detailContainer == null) {
+            Intent intent = new Intent(this, TaskDetailActivity.class);
+            intent.putExtra(Extras.TASK_ID, task.id);
+            startActivity(intent);
+            return;
+        }
+        if (detailPlaceholder != null) {
+            detailPlaceholder.setVisibility(View.GONE);
+        }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.detailContainer, TaskDetailFragment.newInstance(task.id), "detail")
+                .commit();
+    }
+
+    private boolean isShowing(String taskId) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("detail");
+        return fragment instanceof TaskDetailFragment
+                && taskId.equals(((TaskDetailFragment) fragment).taskId());
+    }
+
+    private void clearDetail() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("detail");
+        if (fragment != null) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        }
+        if (detailPlaceholder != null) {
+            detailPlaceholder.setVisibility(View.VISIBLE);
+        }
     }
 
     private void openEditor() {
@@ -102,6 +148,9 @@ public class TaskInboxActivity extends ModuleActivity {
                 .setPositiveButton(R.string.action_delete, (dialog, which) -> {
                     store.remove(task.id);
                     load();
+                    if (isShowing(task.id)) {
+                        clearDetail();
+                    }
                 })
                 .setNegativeButton(R.string.action_cancel, null)
                 .show();
@@ -146,6 +195,17 @@ public class TaskInboxActivity extends ModuleActivity {
             default:
                 return 2;
         }
+    }
+
+    @Override
+    public void onTaskCompleted() {
+        load();
+        clearDetail();
+    }
+
+    @Override
+    public void onTaskEdited() {
+        load();
     }
 
     @Override

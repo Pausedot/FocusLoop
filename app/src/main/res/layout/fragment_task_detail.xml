@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/detailScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toTopOf="@id/actionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/screen_margin"
+            android:paddingTop="@dimen/space_md"
+            android:paddingEnd="@dimen/screen_margin"
+            android:paddingBottom="@dimen/space_xl">
+
+            <TextView
+                android:id="@+id/detailTitle"
+                style="@style/Text.H1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/space_sm"
+                android:textColor="?attr/colorOnSurface"
+                app:layout_constraintEnd_toStartOf="@id/btnEdit"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Redesign the case study layout" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEdit"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="@dimen/touch_target"
+                android:layout_height="@dimen/touch_target"
+                android:contentDescription="@string/action_edit"
+                app:icon="@drawable/ic_edit"
+                app:iconTint="?attr/colorOnSurfaceVariant"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/detailMeta"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detailTitle">
+
+                <TextView
+                    android:id="@+id/detailBadge"
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:background="@drawable/bg_badge_a"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:text="@string/priority_a"
+                    android:textColor="@color/accent"
+                    android:textSize="12sp"
+                    tools:ignore="SmallSp" />
+
+                <TextView
+                    android:id="@+id/detailQuadrant"
+                    style="@style/Text.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_sm"
+                    tools:text="Q1 · Important &amp; urgent" />
+
+                <TextView
+                    android:id="@+id/detailDue"
+                    style="@style/Text.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/space_md"
+                    tools:text="Today" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/detailDivider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/space_lg"
+                android:background="?attr/colorOutlineVariant"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detailMeta" />
+
+            <TextView
+                android:id="@+id/labelNotes"
+                style="@style/Text.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_lg"
+                android:text="@string/detail_label_notes"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detailDivider" />
+
+            <TextView
+                android:id="@+id/detailNotes"
+                style="@style/Text.Body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/labelNotes"
+                tools:text="Reduce the case study page to one column." />
+
+            <TextView
+                android:id="@+id/labelFocus"
+                style="@style/Text.Label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xl"
+                android:text="@string/detail_label_focus"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detailNotes" />
+
+            <TextView
+                android:id="@+id/detailFocusValue"
+                style="@style/Text.Body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xs"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/labelFocus"
+                tools:text="2 sessions · 50 min" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/actionBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?android:colorBackground"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/screen_margin"
+        android:paddingTop="@dimen/space_sm"
+        android:paddingEnd="@dimen/screen_margin"
+        android:paddingBottom="@dimen/space_md"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStartFocus"
+            style="@style/Widget.FocusLoop.Button"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="@string/detail_start_focus"
+            app:icon="@drawable/ic_play_arrow"
+            app:iconGravity="textStart" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnComplete"
+            style="@style/Widget.FocusLoop.Button.Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xs"
+            android:text="@string/detail_mark_complete"
+            app:icon="@drawable/ic_check"
+            app:iconGravity="textStart" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

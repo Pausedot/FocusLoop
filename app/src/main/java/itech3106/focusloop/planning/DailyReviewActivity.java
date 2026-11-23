@@ -1,10 +1,10 @@
 package itech3106.focusloop.planning;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.material.textfield.TextInputEditText;
+import androidx.fragment.app.Fragment;
 
 import java.util.Locale;
 
@@ -19,8 +19,12 @@ import itech3106.focusloop.data.TaskStore;
 
 public class DailyReviewActivity extends ModuleActivity {
 
+    private final String[] answers = new String[3];
+
     private ReviewStore reviewStore;
     private int today;
+    private int step;
+    private boolean twoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +34,28 @@ public class DailyReviewActivity extends ModuleActivity {
 
         today = Dates.today();
         reviewStore = new ReviewStore(this);
+        ((TextView) findViewById(R.id.reviewDate))
+                .setText(Dates.longDate(today).toUpperCase(Locale.ENGLISH));
 
-        ((TextView) findViewById(R.id.reviewDate)).setText(
-                Dates.longDate(today).toUpperCase(Locale.ENGLISH));
-
+        loadExisting();
         showTiles();
-        showExistingReview();
 
-        findViewById(R.id.btnSaveReview).setOnClickListener(v -> save());
-        findViewById(R.id.btnViewStats).setOnClickListener(v ->
-                startActivity(new Intent(this, StatsActivity.class)));
+        twoPane = findViewById(R.id.step0) != null;
+        if (twoPane) {
+            setupTwoPane(savedInstanceState);
+        } else {
+            setupPhone(savedInstanceState);
+        }
+    }
+
+    private void loadExisting() {
+        Review review = reviewStore.forDay(today);
+        if (review == null) {
+            return;
+        }
+        answers[0] = review.wentWell;
+        answers[1] = review.obstacle;
+        answers[2] = review.tomorrow;
     }
 
     private void showTiles() {
@@ -53,39 +69,115 @@ public class DailyReviewActivity extends ModuleActivity {
                 .setText(String.format(Locale.ENGLISH, "%.1f", hours));
     }
 
-    private void showExistingReview() {
-        Review review = reviewStore.forDay(today);
-        if (review == null) {
-            return;
+    private void setupPhone(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            step = savedInstanceState.getInt("step", 0);
+            String[] saved = savedInstanceState.getStringArray("answers");
+            if (saved != null) {
+                System.arraycopy(saved, 0, answers, 0, Math.min(saved.length, answers.length));
+            }
         }
-        ((TextInputEditText) findViewById(R.id.q1Edit)).setText(review.wentWell);
-        ((TextInputEditText) findViewById(R.id.q2Edit)).setText(review.obstacle);
-        ((TextInputEditText) findViewById(R.id.q3Edit)).setText(review.tomorrow);
+
+        findViewById(R.id.btnBack).setOnClickListener(v -> {
+            if (step > 0) {
+                showStep(step - 1);
+            }
+        });
+        findViewById(R.id.btnNext).setOnClickListener(v -> {
+            if (step < 2) {
+                showStep(step + 1);
+            } else {
+                saveReview();
+            }
+        });
+        showStep(step);
     }
 
-    private void save() {
-        String wentWell = text(R.id.q1Edit);
-        String obstacle = text(R.id.q2Edit);
-        String tomorrow = text(R.id.q3Edit);
+    private void setupTwoPane(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            addStep(R.id.step0, 0, "step0");
+            addStep(R.id.step1, 1, "step1");
+            addStep(R.id.step2, 2, "step2");
+        }
+        findViewById(R.id.btnSave).setOnClickListener(v -> {
+            collectTwoPane();
+            saveReview();
+        });
+    }
 
-        ReviewStore store = new ReviewStore(this);
-        Review previous = store.forDay(today);
+    private void addStep(int containerId, int index, String tag) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(containerId, ReviewStepFragment.newInstance(index, answers[index]), tag)
+                .commit();
+    }
+
+    private void showStep(int newStep) {
+        Fragment current = getSupportFragmentManager().findFragmentByTag("step");
+        if (current instanceof ReviewStepFragment) {
+            answers[step] = ((ReviewStepFragment) current).answer();
+        }
+        step = newStep;
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.stepContainer,
+                        ReviewStepFragment.newInstance(step, answers[step]), "step")
+                .commit();
+        updateStepChrome();
+    }
+
+    private void updateStepChrome() {
+        ((View) findViewById(R.id.btnBack)).setEnabled(step > 0);
+        ((TextView) findViewById(R.id.btnNext)).setText(
+                step == 2 ? R.string.action_save : R.string.review_next);
+
+        int accent = R.drawable.bg_dot_accent;
+        int muted = R.drawable.bg_dot_muted;
+        findViewById(R.id.dot1).setBackgroundResource(step == 0 ? accent : muted);
+        findViewById(R.id.dot2).setBackgroundResource(step == 1 ? accent : muted);
+        findViewById(R.id.dot3).setBackgroundResource(step == 2 ? accent : muted);
+    }
+
+    private void collectTwoPane() {
+        Fragment zero = getSupportFragmentManager().findFragmentByTag("step0");
+        Fragment one = getSupportFragmentManager().findFragmentByTag("step1");
+        Fragment two = getSupportFragmentManager().findFragmentByTag("step2");
+        if (zero instanceof ReviewStepFragment) {
+            answers[0] = ((ReviewStepFragment) zero).answer();
+        }
+        if (one instanceof ReviewStepFragment) {
+            answers[1] = ((ReviewStepFragment) one).answer();
+        }
+        if (two instanceof ReviewStepFragment) {
+            answers[2] = ((ReviewStepFragment) two).answer();
+        }
+    }
+
+    private void saveReview() {
+        Fragment current = getSupportFragmentManager().findFragmentByTag("step");
+        if (current instanceof ReviewStepFragment) {
+            answers[step] = ((ReviewStepFragment) current).answer();
+        }
+
+        Review previous = reviewStore.forDay(today);
         Review review = new Review(
                 "r-" + today,
                 today,
-                wentWell,
-                obstacle,
-                tomorrow,
+                answers[0] == null ? "" : answers[0],
+                answers[1] == null ? "" : answers[1],
+                answers[2] == null ? "" : answers[2],
                 previous == null ? 0 : previous.mood,
                 previous == null ? null : previous.voicePath,
                 System.currentTimeMillis());
-        store.save(review);
+        reviewStore.save(review);
         finish();
     }
 
-    private String text(int viewId) {
-        TextInputEditText edit = findViewById(viewId);
-        return edit.getText() == null ? "" : edit.getText().toString().trim();
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("step", step);
+        outState.putStringArray("answers", answers);
     }
 
     @Override

@@ -126,7 +126,7 @@
     <string name="detail_due_today">Due today</string>
     <string name="detail_quadrant">Q1 · Important &amp; urgent</string>
     <string name="detail_label_notes">NOTES</string>
-    <string name="detail_label_focus">FOCUSED ON THIS</string>
+    <string name="detail_select_task">Select a task to see the details.</string>    <string name="detail_label_focus">FOCUSED ON THIS</string>
     <string name="detail_focus_value">3 sessions · 70 min</string>
     <plurals name="detail_sessions">
         <item quantity="one">%1$d session</item>
@@ -210,6 +210,12 @@
     <string name="history_stopped">Stopped early</string>
     <string name="history_empty_title">No sessions yet</string>
     <string name="history_empty_body">Finish a pomodoro and it lands here.</string>
+    <string name="history_select_session">Select a session to see the details.</string>
+    <string name="history_detail_duration">DURATION</string>
+    <string name="history_detail_status">STATUS</string>
+    <string name="history_detail_round">ROUND</string>
+    <string name="history_open_task">Open task</string>
+    <string name="history_round_format">Round %1$d</string>
 
     <!-- Plan -->
     <string name="title_plan">Plan</string>
@@ -263,6 +269,8 @@
     <string name="hint_review_q2">Name the friction, not the feeling</string>
     <string name="hint_review_q3">Small enough to actually start</string>
     <string name="review_view_stats">View statistics</string>
+    <string name="review_back">Back</string>
+    <string name="review_next">Next</string>
     <string name="title_review_archive">Review archive</string>
     <string name="archive_summary_format">%1$d reviews</string>
     <string name="archive_empty_title">No reviews yet</string>

@@ -1,69 +1,62 @@
 package itech3106.focusloop.focus;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import itech3106.focusloop.Extras;
 import itech3106.focusloop.ModuleActivity;
 import itech3106.focusloop.R;
-import itech3106.focusloop.adapter.SessionAdapter;
 import itech3106.focusloop.data.FocusSession;
-import itech3106.focusloop.data.SessionStore;
-import itech3106.focusloop.tasks.TaskDetailActivity;
 
-public class FocusHistoryActivity extends ModuleActivity {
+/**
+ * Hosts the history list and, on a tablet, the session detail beside it. On a phone the
+ * detail replaces the list and goes on the back stack.
+ */
+public class FocusHistoryActivity extends ModuleActivity implements HistoryListFragment.Listener {
+
+    private boolean twoPane;
+    private View placeholder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_focus_history);
+        setContentView(R.layout.activity_focus_history_host);
         bindChrome(R.string.title_history);
 
-        SessionStore store = new SessionStore(this);
-        List<Object> rows = groupRows(store.recent());
-        SessionAdapter adapter = new SessionAdapter(rows, this::openSession);
-        RecyclerView list = findViewById(R.id.sessionList);
-        list.setLayoutManager(new LinearLayoutManager(this));
-        list.setAdapter(adapter);
+        twoPane = findViewById(R.id.detailContainer) != null;
+        placeholder = findViewById(R.id.historyPlaceholder);
 
-        ((TextView) findViewById(R.id.historySessionsValue))
-                .setText(String.valueOf(store.today().size()));
-        ((TextView) findViewById(R.id.historyMinutesValue))
-                .setText(String.valueOf(store.minutesToday()));
-
-        boolean isEmpty = rows.isEmpty();
-        list.setVisibility(isEmpty ? View.GONE : View.VISIBLE);
-        findViewById(R.id.emptyState).setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.listContainer, new HistoryListFragment(), "list")
+                    .commit();
+        } else if (twoPane
+                && getSupportFragmentManager().findFragmentByTag("session") != null
+                && placeholder != null) {
+            placeholder.setVisibility(View.GONE);
+        }
     }
 
-    private static List<Object> groupRows(List<FocusSession> sessions) {
-        List<Object> rows = new ArrayList<>();
-        String group = null;
-        for (FocusSession session : sessions) {
-            if (!session.group.equals(group)) {
-                group = session.group;
-                rows.add(group);
+    @Override
+    public void onSessionSelected(FocusSession session) {
+        Fragment detail = SessionDetailFragment.newInstance(session.id);
+        if (twoPane) {
+            if (placeholder != null) {
+                placeholder.setVisibility(View.GONE);
             }
-            rows.add(session);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.detailContainer, detail, "session")
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.listContainer, detail, "session")
+                    .addToBackStack("session")
+                    .commit();
         }
-        return rows;
-    }
-
-    private void openSession(FocusSession session) {
-        if (session.taskId == null) {
-            return;
-        }
-        Intent intent = new Intent(this, TaskDetailActivity.class);
-        intent.putExtra(Extras.TASK_ID, session.taskId);
-        startActivity(intent);
     }
 
     @Override

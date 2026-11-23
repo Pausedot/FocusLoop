@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/screen_margin"
+    android:paddingTop="@dimen/space_sm"
+    android:paddingEnd="@dimen/screen_margin">
+
+    <TextView
+        android:id="@+id/reviewDate"
+        style="@style/Text.Label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="SUNDAY · 22 NOVEMBER" />
+
+    <TextView
+        android:id="@+id/reviewQuestion"
+        style="@style/Text.H1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_xs"
+        android:text="@string/review_question" />
+
+    <LinearLayout
+        android:id="@+id/reviewTiles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_md"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.FocusLoop.Card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/space_xs"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/space_md">
+
+                <TextView
+                    android:id="@+id/tileSessionsValue"
+                    style="@style/Text.Number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/review_sessions_value"
+                    android:textSize="26sp" />
+
+                <TextView
+                    style="@style/Text.Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/review_stat_sessions"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.FocusLoop.Card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_xs"
+            android:layout_marginEnd="@dimen/space_xs"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/space_md">
+
+                <TextView
+                    android:id="@+id/tileTasksValue"
+                    style="@style/Text.Number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/review_tasks_value"
+                    android:textSize="26sp" />
+
+                <TextView
+                    style="@style/Text.Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/review_stat_tasks"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.FocusLoop.Card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_xs"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/space_md">
+
+                <TextView
+                    android:id="@+id/tileHoursValue"
+                    style="@style/Text.Number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/review_hours_value"
+                    android:textSize="26sp" />
+
+                <TextView
+                    style="@style/Text.Label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/review_stat_hours"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</LinearLayout>

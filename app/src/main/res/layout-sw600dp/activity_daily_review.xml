@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.FocusLoop.Toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/title_review"
+        app:titleTextAppearance="@style/Text.Toolbar" />
+
+    <include
+        android:id="@+id/reviewHeader"
+        layout="@layout/review_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <LinearLayout
+        android:id="@+id/stepRow"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/screen_margin"
+        android:layout_marginTop="@dimen/space_md"
+        android:layout_marginEnd="@dimen/screen_margin"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/btnSave"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reviewHeader">
+
+        <FrameLayout
+            android:id="@+id/step0"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/space_xs"
+            android:layout_weight="1" />
+
+        <FrameLayout
+            android:id="@+id/step1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/space_xs"
+            android:layout_marginEnd="@dimen/space_xs"
+            android:layout_weight="1" />
+
+        <FrameLayout
+            android:id="@+id/step2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/space_xs"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSave"
+        style="@style/Widget.FocusLoop.Button"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="@dimen/screen_margin"
+        android:layout_marginEnd="@dimen/screen_margin"
+        android:layout_marginBottom="@dimen/space_md"
+        android:text="@string/action_save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
