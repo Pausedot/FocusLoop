@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -56,6 +58,24 @@ public class FiveSecondActivity extends BaseActivity {
         taskName.setText(taskTitle == null ? getString(R.string.focus_task_default) : taskTitle);
 
         handler.postDelayed(tick, 1000);
+
+        GestureDetector gestureDetector = new GestureDetector(this,
+                new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onFling(MotionEvent e1, MotionEvent e2, float vx, float vy) {
+                        if (e1 != null && e2 != null
+                                && e2.getY() - e1.getY() > 120
+                                && Math.abs(vy) > Math.abs(vx)) {
+                            openPomodoro(false);
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+        findViewById(R.id.root).setOnTouchListener((v, event) -> {
+            gestureDetector.onTouchEvent(event);
+            return false;
+        });
 
         findViewById(R.id.root).setOnClickListener(v -> openPomodoro(true));
         findViewById(R.id.skipText).setOnClickListener(v -> openPomodoro(false));

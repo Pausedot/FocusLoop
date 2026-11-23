@@ -2,6 +2,7 @@ package itech3106.focusloop.focus;
 
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -43,6 +44,10 @@ public class TimerSettingsActivity extends ModuleActivity {
 
         findViewById(R.id.btnRestore).setOnClickListener(v -> restoreDefaults());
         findViewById(R.id.btnSaveSettings).setOnClickListener(v -> save());
+        findViewById(R.id.soundCard).setOnClickListener(v -> {
+            Chime.play(this);
+            Toast.makeText(this, R.string.settings_preview_playing, Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void load() {

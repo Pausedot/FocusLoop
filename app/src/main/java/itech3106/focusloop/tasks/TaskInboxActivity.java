@@ -7,11 +7,14 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,6 +75,58 @@ public class TaskInboxActivity extends ModuleActivity implements TaskDetailFragm
         });
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public int getSwipeDirs(@NonNull RecyclerView recyclerView,
+                                    @NonNull RecyclerView.ViewHolder viewHolder) {
+                int position = viewHolder.getBindingAdapterPosition();
+                if (position == RecyclerView.NO_POSITION || rows.get(position) instanceof String) {
+                    return 0;
+                }
+                return super.getSwipeDirs(recyclerView, viewHolder);
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getBindingAdapterPosition();
+                if (position == RecyclerView.NO_POSITION
+                        || !(rows.get(position) instanceof Task)) {
+                    adapter.notifyDataSetChanged();
+                    return;
+                }
+                Task task = (Task) rows.get(position);
+                if (direction == ItemTouchHelper.RIGHT) {
+                    store.setDone(task.id, true);
+                    load();
+                    Snackbar.make(list, R.string.task_completed, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.action_undo, v -> {
+                                store.setDone(task.id, false);
+                                load();
+                            })
+                            .show();
+                } else {
+                    store.remove(task.id);
+                    load();
+                    Snackbar.make(list, R.string.task_deleted, Snackbar.LENGTH_LONG)
+                            .setAction(R.string.action_undo, v -> {
+                                store.add(task);
+                                load();
+                            })
+                            .show();
+                }
+                if (isShowing(task.id)) {
+                    clearDetail();
+                }
+            }
+        }).attachToRecyclerView(list);
 
         findViewById(R.id.fabAdd).setOnClickListener(v -> openEditor());
         findViewById(R.id.emptyAction).setOnClickListener(v -> openEditor());

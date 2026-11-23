@@ -2,15 +2,27 @@ package itech3106.focusloop.tasks;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import itech3106.focusloop.Extras;
 import itech3106.focusloop.R;
@@ -36,6 +48,9 @@ public class TaskDetailFragment extends Fragment {
     private TaskStore store;
     private Task task;
     private Listener listener;
+    private ActivityResultLauncher<String[]> photoPicker;
+    private ImageView photoView;
+    private View photoCard;
 
     public static TaskDetailFragment newInstance(String taskId) {
         TaskDetailFragment fragment = new TaskDetailFragment();
@@ -51,6 +66,13 @@ public class TaskDetailFragment extends Fragment {
         if (context instanceof Listener) {
             listener = (Listener) context;
         }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        photoPicker = registerForActivityResult(
+                new ActivityResultContracts.OpenDocument(), this::onPhotoPicked);
     }
 
     @Nullable
@@ -115,13 +137,96 @@ public class TaskDetailFragment extends Fragment {
                 getResources().getQuantityString(R.plurals.detail_sessions, count, count)
                         + " · " + minutes + " min");
 
+        photoCard = view.findViewById(R.id.photoCard);
+        photoView = view.findViewById(R.id.detailPhoto);
+        view.findViewById(R.id.btnAddPhoto).setOnClickListener(v ->
+                photoPicker.launch(new String[]{"image/*"}));
+        view.findViewById(R.id.btnRemovePhoto).setOnClickListener(v -> removePhoto());
+        bindPhoto();
+
         view.findViewById(R.id.btnEdit).setOnClickListener(v -> openEditor());
         view.findViewById(R.id.btnStartFocus).setOnClickListener(v -> startFocus());
         view.findViewById(R.id.btnComplete).setOnClickListener(v -> complete());
     }
 
-    private void openEditor() {
+    private void bindPhoto() {
+        if (photoCard == null || photoView == null) {
+            return;
+        }
+        File file = task == null || task.attachmentPath == null
+                ? null : new File(task.attachmentPath);
+        if (file != null && file.exists()) {
+            photoCard.setVisibility(View.VISIBLE);
+            photoView.setImageBitmap(decode(file));
+        } else {
+            photoCard.setVisibility(View.GONE);
+            photoView.setImageDrawable(null);
+        }
+    }
+
+    private void onPhotoPicked(Uri uri) {
+        if (uri == null || task == null) {
+            return;
+        }
+        File dir = new File(requireContext().getFilesDir(), "attachments");
+        if (!dir.exists() && !dir.mkdirs()) {
+            return;
+        }
+        File dest = new File(dir, task.id + "-" + System.currentTimeMillis() + ".jpg");
+        try (InputStream in = requireContext().getContentResolver().openInputStream(uri);
+             OutputStream out = new FileOutputStream(dest)) {
+            if (in == null) {
+                return;
+            }
+            byte[] buffer = new byte[8192];
+            int read;
+            while ((read = in.read(buffer)) > 0) {
+                out.write(buffer, 0, read);
+            }
+        } catch (IOException ignored) {
+            return;
+        }
+
+        if (task.attachmentPath != null) {
+            new File(task.attachmentPath).delete();
+        }
+        task.attachmentPath = dest.getAbsolutePath();
+        store.upsert(task);
+        bindPhoto();
+        if (listener != null) {
+            listener.onTaskEdited();
+        }
+    }
+
+    private void removePhoto() {
         if (task == null) {
+            return;
+        }
+        if (task.attachmentPath != null) {
+            new File(task.attachmentPath).delete();
+        }
+        task.attachmentPath = null;
+        store.upsert(task);
+        bindPhoto();
+        if (listener != null) {
+            listener.onTaskEdited();
+        }
+    }
+
+    private static Bitmap decode(File file) {
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+        bounds.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(file.getAbsolutePath(), bounds);
+        int sample = 1;
+        while (bounds.outWidth / sample > 1024 || bounds.outHeight / sample > 1024) {
+            sample *= 2;
+        }
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = sample;
+        return BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+    }
+
+    private void openEditor() {        if (task == null) {
             return;
         }
         Intent intent = new Intent(requireContext(), TaskEditActivity.class);

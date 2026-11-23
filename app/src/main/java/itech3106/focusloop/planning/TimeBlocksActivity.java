@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -62,6 +63,41 @@ public class TimeBlocksActivity extends ModuleActivity {
         slotList = findViewById(R.id.slotList);
         slotList.setLayoutManager(new LinearLayoutManager(this));
         slotList.setAdapter(adapter);
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView,
+                                  RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
+                int from = viewHolder.getBindingAdapterPosition();
+                int to = target.getBindingAdapterPosition();
+                if (from == RecyclerView.NO_POSITION || to == RecyclerView.NO_POSITION) {
+                    return false;
+                }
+                TimeSlot first = slots.get(from);
+                TimeSlot second = slots.get(to);
+                String title = first.title;
+                String meta = first.meta;
+                first.title = second.title;
+                first.meta = second.meta;
+                second.title = title;
+                second.meta = meta;
+                planStore.save(first);
+                planStore.save(second);
+                adapter.notifyItemMoved(from, to);
+                return true;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                // Dragging only; no swipe action on the hour list.
+            }
+
+            @Override
+            public boolean isLongPressDragEnabled() {
+                return true;
+            }
+        }).attachToRecyclerView(slotList);
 
         WeekAdapter weekAdapter = new WeekAdapter(DemoData.weekDays(), this::openTask);
         weekList = findViewById(R.id.weekList);

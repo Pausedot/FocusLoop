@@ -1,11 +1,21 @@
 package itech3106.focusloop.planning;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 
 import itech3106.focusloop.ModuleActivity;
@@ -26,6 +36,17 @@ public class DailyReviewActivity extends ModuleActivity {
     private int step;
     private boolean twoPane;
 
+    private static final int REQUEST_AUDIO = 4001;
+
+    private MediaRecorder recorder;
+    private MediaPlayer player;
+    private File voiceFile;
+    private String voicePath;
+    private boolean recording;
+    private TextView btnVoice;
+    private View btnPlayVoice;
+    private TextView voiceStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +60,10 @@ public class DailyReviewActivity extends ModuleActivity {
 
         loadExisting();
         showTiles();
+        if (savedInstanceState != null) {
+            voicePath = savedInstanceState.getString("voice");
+        }
+        setupVoice();
 
         twoPane = findViewById(R.id.step0) != null;
         if (twoPane) {
@@ -56,6 +81,7 @@ public class DailyReviewActivity extends ModuleActivity {
         answers[0] = review.wentWell;
         answers[1] = review.obstacle;
         answers[2] = review.tomorrow;
+        voicePath = review.voicePath;
     }
 
     private void showTiles() {
@@ -167,10 +193,169 @@ public class DailyReviewActivity extends ModuleActivity {
                 answers[1] == null ? "" : answers[1],
                 answers[2] == null ? "" : answers[2],
                 previous == null ? 0 : previous.mood,
-                previous == null ? null : previous.voicePath,
+                voicePath,
                 System.currentTimeMillis());
         reviewStore.save(review);
         finish();
+    }
+
+    private void setupVoice() {
+        btnVoice = findViewById(R.id.btnVoice);
+        btnPlayVoice = findViewById(R.id.btnPlayVoice);
+        voiceStatus = findViewById(R.id.voiceStatus);
+        btnVoice.setOnClickListener(v -> {
+            if (recording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        });
+        btnPlayVoice.setOnClickListener(v -> playVoice());
+        updateVoiceUi();
+    }
+
+    private void startRecording() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_AUDIO);
+            return;
+        }
+
+        File dir = new File(getFilesDir(), "voice");
+        if (!dir.exists() && !dir.mkdirs()) {
+            return;
+        }
+        voiceFile = new File(dir, "review-" + today + ".m4a");
+        if (voiceFile.exists()) {
+            voiceFile.delete();
+        }
+
+        recorder = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+                ? new MediaRecorder(this)
+                : new MediaRecorder();
+        try {
+            recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+            recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+            recorder.setAudioEncodingBitRate(64000);
+            recorder.setAudioSamplingRate(44100);
+            recorder.setOutputFile(voiceFile.getAbsolutePath());
+            recorder.setMaxDuration(120000);
+            recorder.setOnInfoListener((mr, what, extra) -> {
+                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
+                    stopRecording();
+                }
+            });
+            recorder.prepare();
+            recorder.start();
+            recording = true;
+            updateVoiceUi();
+        } catch (IOException | RuntimeException e) {
+            releaseRecorder();
+            recording = false;
+            Toast.makeText(this, R.string.voice_permission, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void stopRecording() {
+        if (recorder == null) {
+            return;
+        }
+        try {
+            recorder.stop();
+        } catch (RuntimeException e) {
+            if (voiceFile != null) {
+                voiceFile.delete();
+            }
+        }
+        releaseRecorder();
+        recording = false;
+        if (voiceFile != null && voiceFile.exists() && voiceFile.length() > 0) {
+            voicePath = voiceFile.getAbsolutePath();
+        }
+        updateVoiceUi();
+    }
+
+    private void releaseRecorder() {
+        if (recorder != null) {
+            try {
+                recorder.reset();
+            } catch (RuntimeException ignored) {
+                // Already stopped or released.
+            }
+            recorder.release();
+            recorder = null;
+        }
+    }
+
+    private void playVoice() {
+        if (voicePath == null) {
+            return;
+        }
+        try {
+            if (player != null) {
+                player.release();
+            }
+            player = new MediaPlayer();
+            player.setDataSource(voicePath);
+            player.setOnCompletionListener(mp -> {
+                mp.release();
+                if (player == mp) {
+                    player = null;
+                }
+            });
+            player.prepare();
+            player.start();
+        } catch (IOException | RuntimeException e) {
+            if (player != null) {
+                player.release();
+                player = null;
+            }
+        }
+    }
+
+    private void updateVoiceUi() {
+        if (btnVoice == null) {
+            return;
+        }
+        btnVoice.setText(recording ? R.string.voice_stop : R.string.voice_record);
+        btnPlayVoice.setVisibility(voicePath == null ? View.GONE : View.VISIBLE);
+        voiceStatus.setText(recording
+                ? R.string.voice_recording
+                : voicePath == null ? R.string.voice_none : R.string.voice_recorded);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode != REQUEST_AUDIO) {
+            return;
+        }
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startRecording();
+        } else {
+            Toast.makeText(this, R.string.voice_permission, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        if (recording) {
+            stopRecording();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        releaseRecorder();
+        if (player != null) {
+            player.release();
+            player = null;
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -178,6 +363,7 @@ public class DailyReviewActivity extends ModuleActivity {
         super.onSaveInstanceState(outState);
         outState.putInt("step", step);
         outState.putStringArray("answers", answers);
+        outState.putString("voice", voicePath);
     }
 
     @Override

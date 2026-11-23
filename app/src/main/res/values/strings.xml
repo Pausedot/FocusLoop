@@ -126,7 +126,11 @@
     <string name="detail_due_today">Due today</string>
     <string name="detail_quadrant">Q1 · Important &amp; urgent</string>
     <string name="detail_label_notes">NOTES</string>
-    <string name="detail_select_task">Select a task to see the details.</string>    <string name="detail_label_focus">FOCUSED ON THIS</string>
+    <string name="detail_select_task">Select a task to see the details.</string>
+    <string name="detail_add_photo">Add photo</string>
+    <string name="detail_remove_photo">Remove photo</string>
+    <string name="detail_photo">Task photo</string>
+    <string name="settings_preview_playing">Playing preview</string>    <string name="detail_label_focus">FOCUSED ON THIS</string>
     <string name="detail_focus_value">3 sessions · 70 min</string>
     <plurals name="detail_sessions">
         <item quantity="one">%1$d session</item>
@@ -138,6 +142,9 @@
     <string name="delete_task_title">Delete task?</string>
     <string name="delete_task_body">“%1$s” will be removed from the list.</string>
     <string name="action_delete">Delete</string>
+    <string name="action_undo">Undo</string>
+    <string name="task_completed">Task completed</string>
+    <string name="task_deleted">Task deleted</string>
 
     <!-- Pomodoro -->
     <string name="title_focus">Focus</string>
@@ -164,6 +171,7 @@
     <string name="break_done">Done for now</string>
     <string name="session_take_break">Take a break</string>
     <string name="focus_hint">One loop at a time.</string>
+    <string name="cd_timer_double_tap">Double tap to pause or resume</string>
     <string name="focus_caption">25 min focus</string>
     <string name="session_complete_title">Session complete</string>
     <string name="session_complete_message">25 minutes focused</string>
@@ -193,7 +201,7 @@
 
     <!-- Five second -->
     <string name="five_ready">GET READY</string>
-    <string name="five_hint">Tap anywhere to start</string>
+    <string name="five_hint">Tap to start · Swipe down to cancel</string>
     <string name="five_skip">Skip</string>
     <string name="five_count">5</string>
     <string name="five_go">GO</string>
@@ -225,7 +233,7 @@
     <string name="plan_yesterday">Yesterday</string>
     <string name="plan_selected">Selected day</string>
     <string name="block_meta_format">%1$s · 60 min</string>
-    <string name="plan_hint">Tap an hour to plan it.</string>
+    <string name="plan_hint">Tap an hour to plan it. Long-press a block to move it.</string>
     <string name="plan_now">NOW</string>
     <string name="plan_add_block">Add a block</string>
     <string name="plan_day">Day</string>
@@ -271,6 +279,13 @@
     <string name="review_view_stats">View statistics</string>
     <string name="review_back">Back</string>
     <string name="review_next">Next</string>
+    <string name="voice_record">Record voice note</string>
+    <string name="voice_stop">Stop recording</string>
+    <string name="voice_play">Play</string>
+    <string name="voice_none">No voice note</string>
+    <string name="voice_recorded">Voice note saved</string>
+    <string name="voice_recording">Recording…</string>
+    <string name="voice_permission">Microphone permission is needed.</string>
     <string name="title_review_archive">Review archive</string>
     <string name="archive_summary_format">%1$d reviews</string>
     <string name="archive_empty_title">No reviews yet</string>

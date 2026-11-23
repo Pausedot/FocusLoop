@@ -72,6 +72,9 @@ public class BreakActivity extends BaseActivity {
     }
 
     private void onBreakFinished() {
+        if (Prefs.soundEnabled(this)) {
+            Chime.play(this);
+        }
         new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.break_end_title)
                 .setMessage(R.string.break_end_message)

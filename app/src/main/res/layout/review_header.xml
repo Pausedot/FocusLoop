@@ -123,4 +123,38 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/voiceRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_sm"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVoice"
+            style="@style/Widget.FocusLoop.Button.Outlined"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:text="@string/voice_record" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPlayVoice"
+            style="@style/Widget.FocusLoop.Button.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_marginStart="@dimen/space_xs"
+            android:text="@string/voice_play"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/voiceStatus"
+            style="@style/Text.Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_sm"
+            android:layout_weight="1"
+            android:text="@string/voice_none" />
+    </LinearLayout>
 </LinearLayout>

@@ -10,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
@@ -92,6 +94,20 @@ public class PomodoroActivity extends ModuleActivity {
         btnPlay.setOnClickListener(v -> onPlayClicked());
         btnPause.setOnClickListener(v -> pauseTimer());
         btnFiveSecond.setOnClickListener(v -> openFiveSecond());
+
+        GestureDetector gestureDetector = new GestureDetector(this,
+                new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onDoubleTap(MotionEvent e) {
+                        onPlayClicked();
+                        return true;
+                    }
+                });
+        ringProgress.setOnTouchListener((v, event) -> {
+            gestureDetector.onTouchEvent(event);
+            return true;
+        });
+        ringProgress.setContentDescription(getString(R.string.cd_timer_double_tap));
 
         updateTimerUi();
         updateControls();
@@ -201,6 +217,9 @@ public class PomodoroActivity extends ModuleActivity {
     }
 
     private void onSessionComplete() {
+        if (Prefs.soundEnabled(this)) {
+            Chime.play(this);
+        }
         recordSession(true);
         showCompletionDialog();
         postCompletionNotification();
