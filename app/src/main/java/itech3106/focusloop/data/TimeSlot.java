@@ -10,6 +10,7 @@ public class TimeSlot {
     public final String hour;
     public String title;
     public String meta;
+    public String taskId;
 
     public TimeSlot(String hour, String title, String meta) {
         this(Dates.today(), hour, title, meta);

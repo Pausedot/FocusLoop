@@ -118,12 +118,21 @@ public class TaskInboxActivity extends ModuleActivity implements TaskDetailFragm
                 } else {
                     store.remove(task.id);
                     load();
-                    Snackbar.make(list, R.string.task_deleted, Snackbar.LENGTH_LONG)
+                    Snackbar snackbar = Snackbar.make(list, R.string.task_deleted,
+                                    Snackbar.LENGTH_LONG)
                             .setAction(R.string.action_undo, v -> {
                                 store.add(task);
                                 load();
-                            })
-                            .show();
+                            });
+                    snackbar.addCallback(new Snackbar.Callback() {
+                        @Override
+                        public void onDismissed(Snackbar bar, int event) {
+                            if (event != DISMISS_EVENT_ACTION) {
+                                store.cleanup(task);
+                            }
+                        }
+                    });
+                    snackbar.show();
                 }
                 if (isShowing(task.id)) {
                     clearDetail();
@@ -217,7 +226,7 @@ public class TaskInboxActivity extends ModuleActivity implements TaskDetailFragm
                 .setTitle(R.string.delete_task_title)
                 .setMessage(getString(R.string.delete_task_body, task.title))
                 .setPositiveButton(R.string.action_delete, (dialog, which) -> {
-                    store.remove(task.id);
+                    store.delete(task.id);
                     load();
                     if (isShowing(task.id)) {
                         clearDetail();

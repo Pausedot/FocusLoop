@@ -1,6 +1,7 @@
 package itech3106.focusloop.focus;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.fragment.app.Fragment;
@@ -57,6 +58,16 @@ public class FocusHistoryActivity extends ModuleActivity implements HistoryListF
                     .addToBackStack("session")
                     .commit();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home
+                && getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

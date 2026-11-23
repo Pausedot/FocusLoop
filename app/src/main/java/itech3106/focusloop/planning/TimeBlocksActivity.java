@@ -8,6 +8,8 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -57,6 +59,9 @@ public class TimeBlocksActivity extends ModuleActivity {
     private MaterialButton btnPrev;
     private MaterialButton btnNext;
     private ChipGroup viewToggle;
+    private ActivityResultLauncher<Intent> taskPicker;
+    private TextView dialogTaskValue;
+    private String dialogTaskId;
 
     private boolean weekMode;
     private boolean landscape;
@@ -68,6 +73,19 @@ public class TimeBlocksActivity extends ModuleActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_blocks);
         bindChrome(R.string.title_plan);
+
+        taskPicker = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result.getResultCode() != RESULT_OK || result.getData() == null) {
+                        return;
+                    }
+                    dialogTaskId = result.getData().getStringExtra(Extras.TASK_ID);
+                    String title = result.getData().getStringExtra(Extras.TASK_TITLE);
+                    if (dialogTaskValue != null) {
+                        dialogTaskValue.setText(title == null
+                                ? getString(R.string.dialog_no_task) : title);
+                    }
+                });
 
         planStore = new PlanStore(this);
         dayOffset = getIntent().getIntExtra(Extras.DAY_OFFSET, 0);
@@ -96,10 +114,13 @@ public class TimeBlocksActivity extends ModuleActivity {
                 TimeSlot second = slots.get(to);
                 String title = first.title;
                 String meta = first.meta;
+                String taskId = first.taskId;
                 first.title = second.title;
                 first.meta = second.meta;
+                first.taskId = second.taskId;
                 second.title = title;
                 second.meta = meta;
+                second.taskId = taskId;
                 planStore.save(first);
                 planStore.save(second);
                 adapter.notifyItemMoved(from, to);
@@ -355,9 +376,11 @@ public class TimeBlocksActivity extends ModuleActivity {
             public void afterTextChanged(Editable s) {
             }
         });
-        if (slot.title != null) {
-            ((TextView) content.findViewById(R.id.blockTaskValue)).setText(slot.title);
-        }
+        dialogTaskId = slot.taskId;
+        Task linkedTask = dialogTaskId == null ? null : new TaskStore(this).byId(dialogTaskId);
+        dialogTaskValue = content.findViewById(R.id.blockTaskValue);
+        dialogTaskValue.setText(linkedTask == null
+                ? getString(R.string.dialog_no_task) : linkedTask.title);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
                 .setTitle(slot.title == null ? R.string.dialog_new_block : R.string.dialog_edit_block)
@@ -365,6 +388,10 @@ public class TimeBlocksActivity extends ModuleActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+        dialog.setOnDismissListener(d -> {
+            dialogTaskValue = null;
+            dialogTaskId = null;
+        });
 
         View delete = content.findViewById(R.id.blockDelete);
         delete.setVisibility(slot.title == null ? View.GONE : View.VISIBLE);
@@ -381,6 +408,7 @@ public class TimeBlocksActivity extends ModuleActivity {
                 return;
             }
             slot.title = text;
+            slot.taskId = dialogTaskId;
             if (isNew) {
                 slot.meta = getString(R.string.block_meta_format, slot.hour, endHour(slot.hour));
             }
@@ -389,8 +417,9 @@ public class TimeBlocksActivity extends ModuleActivity {
             dialog.dismiss();
         });
         content.findViewById(R.id.blockTaskCard).setOnClickListener(v -> {
-            dialog.dismiss();
-            startActivity(new Intent(this, TaskInboxActivity.class));
+            Intent intent = new Intent(this, TaskInboxActivity.class);
+            intent.putExtra(Extras.PICK_TASK, true);
+            taskPicker.launch(intent);
         });
     }
 

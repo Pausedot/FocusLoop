@@ -28,6 +28,7 @@ public class PlanStore extends JsonStore<TimeSlot> {
         json.put("hour", slot.hour);
         json.put("title", slot.title == null ? "" : slot.title);
         json.put("meta", slot.meta == null ? "" : slot.meta);
+        json.put("taskId", slot.taskId == null ? "" : slot.taskId);
         return json;
     }
 
@@ -35,11 +36,14 @@ public class PlanStore extends JsonStore<TimeSlot> {
     protected TimeSlot fromJson(JSONObject json) throws JSONException {
         String title = json.optString("title", "");
         String meta = json.optString("meta", "");
-        return new TimeSlot(
+        TimeSlot slot = new TimeSlot(
                 json.optInt("epochDay", Dates.today()),
                 json.getString("hour"),
                 title.isEmpty() ? null : title,
                 meta.isEmpty() ? null : meta);
+        String taskId = json.optString("taskId", "");
+        slot.taskId = taskId.isEmpty() ? null : taskId;
+        return slot;
     }
 
     /** Returns the full hour list for a day, creating an empty one on first visit. */
@@ -67,7 +71,26 @@ public class PlanStore extends JsonStore<TimeSlot> {
     public void clear(TimeSlot slot) {
         slot.title = null;
         slot.meta = null;
+        slot.taskId = null;
         upsert(slot);
+    }
+
+    /** Removes a deleted task from any block that linked to it, keeping the block itself. */
+    public synchronized void detachTask(String taskId) {
+        if (taskId == null) {
+            return;
+        }
+        List<TimeSlot> all = all();
+        boolean changed = false;
+        for (TimeSlot slot : all) {
+            if (taskId.equals(slot.taskId)) {
+                slot.taskId = null;
+                changed = true;
+            }
+        }
+        if (changed) {
+            replaceAll(all);
+        }
     }
 
     public int plannedMinutes(int epochDay) {

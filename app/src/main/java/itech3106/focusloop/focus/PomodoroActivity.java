@@ -180,21 +180,34 @@ public class PomodoroActivity extends ModuleActivity {
     }
 
     private void restoreTimerState() {
-        if (!Prefs.timerRunning(this)) {
+        if (Prefs.timerRunning(this)) {
+            long remaining = Prefs.timerEndAt(this) - System.currentTimeMillis();
+            if (remaining > 0) {
+                remainingMs = Math.min(remaining, sessionMs);
+                startTimer();
+                return;
+            }
+            remainingMs = 0;
+            running = false;
+            updateTimerUi();
+            updateControls();
+            Prefs.clearTimer(this);
+            onSessionComplete();
             return;
         }
-        long remaining = Prefs.timerEndAt(this) - System.currentTimeMillis();
-        if (remaining > 0) {
-            remainingMs = Math.min(remaining, sessionMs);
-            startTimer();
+
+        long paused = Prefs.timerRemaining(this);
+        if (paused <= 0) {
             return;
         }
-        remainingMs = 0;
+        remainingMs = Math.min(paused, sessionMs);
         running = false;
+        taskId = Prefs.timerTaskId(this);
+        taskTitle = Prefs.timerTaskTitle(this);
+        showTask();
         updateTimerUi();
         updateControls();
-        Prefs.clearTimer(this);
-        onSessionComplete();
+        FocusNotifier.showRunning(this, taskTitle, 0, true, remainingMs);
     }
 
     private void onPlayClicked() {        if (running) {

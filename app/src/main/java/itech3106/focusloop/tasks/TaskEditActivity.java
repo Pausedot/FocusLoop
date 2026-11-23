@@ -1,7 +1,9 @@
 package itech3106.focusloop.tasks;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -113,6 +115,19 @@ public class TaskEditActivity extends BaseActivity {
             store.upsert(updated);
         }
         finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            Intent intent = new Intent(this, TaskInboxActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private char priorityFor(int checkedId) {

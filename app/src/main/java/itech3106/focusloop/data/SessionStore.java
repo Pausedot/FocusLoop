@@ -112,4 +112,24 @@ public class SessionStore extends JsonStore<FocusSession> {
     public void record(FocusSession session) {
         add(session);
     }
+
+    /** Keeps the history row but removes the link to a task that no longer exists. */
+    public synchronized void detachTask(String taskId) {
+        if (taskId == null) {
+            return;
+        }
+        List<FocusSession> sessions = all();
+        boolean changed = false;
+        for (int i = 0; i < sessions.size(); i++) {
+            FocusSession session = sessions.get(i);
+            if (taskId.equals(session.taskId)) {
+                sessions.set(i, new FocusSession(session.id, session.startedAt,
+                        null, session.title, session.minutes, session.completed, session.round));
+                changed = true;
+            }
+        }
+        if (changed) {
+            replaceAll(sessions);
+        }
+    }
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,8 +14,11 @@ import java.util.List;
 /** Tasks and their completion state. */
 public class TaskStore extends JsonStore<Task> {
 
+    private final Context context;
+
     public TaskStore(Context context) {
         super(context, "tasks_v1");
+        this.context = context.getApplicationContext();
         seedOnce(Seed.tasks());
     }
 
@@ -110,6 +114,28 @@ public class TaskStore extends JsonStore<Task> {
             task.frog = task.id.equals(id);
         }
         replaceAll(tasks);
+    }
+
+    /** Deletes a task and removes the data that only made sense while it existed. */
+    public void delete(String id) {
+        Task task = byId(id);
+        if (task == null) {
+            return;
+        }
+        remove(id);
+        cleanup(task);
+    }
+
+    /** Removes the photo and detaches sessions/plan blocks from a deleted task. */
+    public void cleanup(Task task) {
+        if (task == null) {
+            return;
+        }
+        if (task.attachmentPath != null) {
+            new File(task.attachmentPath).delete();
+        }
+        new SessionStore(context).detachTask(task.id);
+        new PlanStore(context).detachTask(task.id);
     }
 
     public List<Task> dueOn(int epochDay) {
