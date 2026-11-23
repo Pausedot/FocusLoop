@@ -91,8 +91,8 @@ public class MatrixActivity extends ModuleActivity {
     }
 
     private void count(int viewId, int size) {
-        ((TextView) findViewById(viewId))
-                .setText(getString(R.string.matrix_count_format, size));
+        ((TextView) findViewById(viewId)).setText(
+                getResources().getQuantityString(R.plurals.matrix_task_count, size, size));
     }
 
     private void open(String taskId) {

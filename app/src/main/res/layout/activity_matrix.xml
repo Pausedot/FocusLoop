@@ -27,25 +27,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:paddingStart="@dimen/screen_margin"
+            android:paddingTop="@dimen/space_md"
             android:paddingEnd="@dimen/screen_margin"
-            android:paddingBottom="@dimen/space_2xl">
+            android:paddingBottom="@dimen/space_xl">
 
-            <!-- Today's frog strip -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/frogCard"
-                style="@style/Widget.FocusLoop.Card.AccentSoft"
-                android:layout_width="0dp"
+                style="@style/Widget.FocusLoop.Card.Ink"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_sm"
                 android:clickable="true"
-                android:focusable="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:focusable="true">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -57,9 +54,10 @@
                         style="@style/Text.Label"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="@string/matrix_frog_label"
-                        android:textColor="@color/accent"
-                        app:layout_constraintEnd_toStartOf="@id/frogChevron"
+                        android:alpha="0.6"
+                        android:text="@string/main_frog_label"
+                        android:textColor="@color/white_fixed"
+                        app:layout_constraintEnd_toStartOf="@id/frogMeta"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,9 +66,10 @@
                         style="@style/Text.Caption"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/main_frog_meta"
+                        android:alpha="0.7"
+                        android:textColor="@color/white_fixed"
                         app:layout_constraintBaseline_toBaselineOf="@id/frogLabel"
-                        app:layout_constraintEnd_toStartOf="@id/frogChevron" />
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/frogTitle"
@@ -78,392 +77,326 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_sm"
-                        android:text="@string/main_frog_title"
-                        android:textSize="18sp"
-                        app:layout_constraintEnd_toStartOf="@id/frogChevron"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/frogLabel" />
-
-                    <ImageView
-                        android:id="@+id/frogChevron"
-                        android:layout_width="@dimen/icon_md"
-                        android:layout_height="@dimen/icon_md"
-                        android:contentDescription="@null"
-                        android:src="@drawable/ic_chevron_right"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textColor="@color/white_fixed"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/accent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/frogLabel"
+                        tools:text="Redesign the case study layout" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Q1 -->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cellQ1"
-                style="@style/Widget.FocusLoop.Card.AccentSoft"
-                android:layout_width="0dp"
-                android:layout_height="180dp"
-                android:layout_marginTop="@dimen/space_lg"
-                android:layout_marginEnd="@dimen/space_sm"
-                app:layout_constraintEnd_toStartOf="@id/cellQ2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/frogCard">
+                style="@style/Widget.FocusLoop.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_md">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/space_md">
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_lg">
 
-                    <TextView
-                        android:id="@+id/q1Badge"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/bg_badge_surface"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center"
-                        android:text="@string/priority_a"
-                        android:textColor="@color/accent"
-                        android:textSize="11sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/q1Title"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_sm"
-                        android:fontFamily="sans-serif-medium"
-                        android:maxLines="2"
-                        android:text="@string/matrix_q1"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/q1Badge"
-                        app:layout_constraintTop_toTopOf="@id/q1Badge" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/q1Count"
-                        style="@style/Text.Caption"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_xs"
-                        android:text="@string/matrix_count_two"
-                        android:textSize="11sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/q1Badge" />
+                        <TextView
+                            android:id="@+id/q1Badge"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:background="@drawable/bg_badge_a"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:text="@string/priority_a"
+                            android:textColor="@color/accent"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/q1Title"
+                            style="@style/Text.Body"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_sm"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="@string/matrix_q1" />
+
+                        <TextView
+                            android:id="@+id/q1Count"
+                            style="@style/Text.Caption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="2 tasks" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/q1Task1"
-                        style="@style/Text.Caption"
-                        android:layout_width="0dp"
+                        style="@style/Text.Body"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_sm"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:text="@string/matrix_q1_t1"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/q1Count" />
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingTop="@dimen/space_xs"
+                        android:paddingBottom="@dimen/space_xs"
+                        android:visibility="gone"
+                        tools:text="Redesign the case study layout" />
 
                     <TextView
                         android:id="@+id/q1Task2"
-                        style="@style/Text.Caption"
-                        android:layout_width="0dp"
+                        style="@style/Text.Body"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:text="@string/matrix_q1_t2"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/q1Task1" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingTop="@dimen/space_xs"
+                        android:paddingBottom="@dimen/space_xs"
+                        android:visibility="gone"
+                        tools:text="Reply to the client about scope" />
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Q2 -->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cellQ2"
                 style="@style/Widget.FocusLoop.Card"
-                android:layout_width="0dp"
-                android:layout_height="180dp"
-                android:layout_marginStart="@dimen/space_sm"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/cellQ1"
-                app:layout_constraintTop_toTopOf="@id/cellQ1">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/space_md">
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_lg">
 
-                    <TextView
-                        android:id="@+id/q2Badge"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/bg_badge_outline"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center"
-                        android:text="@string/priority_b"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:textSize="11sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/q2Title"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_sm"
-                        android:fontFamily="sans-serif-medium"
-                        android:maxLines="2"
-                        android:text="@string/matrix_q2"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/q2Badge"
-                        app:layout_constraintTop_toTopOf="@id/q2Badge" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/q2Count"
-                        style="@style/Text.Caption"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_xs"
-                        android:text="@string/matrix_count_two"
-                        android:textSize="11sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/q2Badge" />
+                        <TextView
+                            android:id="@+id/q2Badge"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:background="@drawable/bg_badge_outline"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:text="@string/priority_b"
+                            android:textColor="@color/ink_muted"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/q2Title"
+                            style="@style/Text.Body"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_sm"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="@string/matrix_q2" />
+
+                        <TextView
+                            android:id="@+id/q2Count"
+                            style="@style/Text.Caption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="2 tasks" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/q2Task1"
-                        style="@style/Text.Caption"
-                        android:layout_width="0dp"
+                        style="@style/Text.Body"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_sm"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:text="@string/matrix_q2_t1"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/q2Count" />
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingTop="@dimen/space_xs"
+                        android:paddingBottom="@dimen/space_xs"
+                        android:visibility="gone"
+                        tools:text="Outline the A2 database schema" />
 
                     <TextView
                         android:id="@+id/q2Task2"
-                        style="@style/Text.Caption"
-                        android:layout_width="0dp"
+                        style="@style/Text.Body"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:text="@string/matrix_q2_t2"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/q2Task1" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingTop="@dimen/space_xs"
+                        android:paddingBottom="@dimen/space_xs"
+                        android:visibility="gone"
+                        tools:text="Read chapter 7 on notifications" />
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/rowOneBarrier"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="bottom"
-                app:constraint_referenced_ids="cellQ1,cellQ2" />
 
             <!-- Q3 -->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cellQ3"
                 style="@style/Widget.FocusLoop.Card"
-                android:layout_width="0dp"
-                android:layout_height="180dp"
-                android:layout_marginTop="@dimen/space_sm"
-                android:layout_marginEnd="@dimen/space_sm"
-                app:layout_constraintEnd_toStartOf="@id/cellQ4"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rowOneBarrier">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/space_md">
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_lg">
 
-                    <TextView
-                        android:id="@+id/q3Badge"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/bg_badge_outline"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center"
-                        android:text="@string/priority_c"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:textSize="11sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/q3Title"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_sm"
-                        android:fontFamily="sans-serif-medium"
-                        android:maxLines="2"
-                        android:text="@string/matrix_q3"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/q3Badge"
-                        app:layout_constraintTop_toTopOf="@id/q3Badge" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/q3Count"
-                        style="@style/Text.Caption"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_xs"
-                        android:text="@string/matrix_count_one"
-                        android:textSize="11sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/q3Badge" />
+                        <TextView
+                            android:id="@+id/q3Badge"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:background="@drawable/bg_badge_outline"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:text="@string/priority_c"
+                            android:textColor="@color/ink_muted"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/q3Title"
+                            style="@style/Text.Body"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_sm"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="@string/matrix_q3" />
+
+                        <TextView
+                            android:id="@+id/q3Count"
+                            style="@style/Text.Caption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="1 task" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/q3Task1"
-                        style="@style/Text.Caption"
-                        android:layout_width="0dp"
+                        style="@style/Text.Body"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_sm"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:text="@string/matrix_q3_t1"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/q3Count" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingTop="@dimen/space_xs"
+                        android:paddingBottom="@dimen/space_xs"
+                        android:visibility="gone"
+                        tools:text="Book the dentist" />
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Q4 -->
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cellQ4"
                 style="@style/Widget.FocusLoop.Card"
-                android:layout_width="0dp"
-                android:layout_height="180dp"
-                android:layout_marginStart="@dimen/space_sm"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/cellQ3"
-                app:layout_constraintTop_toTopOf="@id/cellQ3">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_sm">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/space_md">
+                    android:orientation="vertical"
+                    android:padding="@dimen/space_lg">
 
-                    <TextView
-                        android:id="@+id/q4Badge"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:background="@drawable/bg_badge_muted"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center"
-                        android:text="@string/priority_d"
-                        android:textColor="?attr/colorOnSurfaceVariant"
-                        android:textSize="11sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/q4Title"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/space_sm"
-                        android:fontFamily="sans-serif-medium"
-                        android:maxLines="2"
-                        android:text="@string/matrix_q4"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/q4Badge"
-                        app:layout_constraintTop_toTopOf="@id/q4Badge" />
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/q4Count"
-                        style="@style/Text.Caption"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_xs"
-                        android:text="@string/matrix_count_three"
-                        android:textSize="11sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/q4Badge" />
+                        <TextView
+                            android:id="@+id/q4Badge"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:background="@drawable/bg_badge_muted"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:text="@string/priority_d"
+                            android:textColor="@color/ink_muted"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/q4Title"
+                            style="@style/Text.Body"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/space_sm"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif-medium"
+                            android:text="@string/matrix_q4" />
+
+                        <TextView
+                            android:id="@+id/q4Count"
+                            style="@style/Text.Caption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="3 tasks" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/q4Task1"
-                        style="@style/Text.Caption"
-                        android:layout_width="0dp"
+                        style="@style/Text.Body"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/space_sm"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:text="@string/matrix_q4_t1"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/q4Count" />
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingTop="@dimen/space_xs"
+                        android:paddingBottom="@dimen/space_xs"
+                        android:visibility="gone"
+                        tools:text="Clean up Figma components" />
 
                     <TextView
                         android:id="@+id/q4Task2"
-                        style="@style/Text.Caption"
-                        android:layout_width="0dp"
+                        style="@style/Text.Body"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:text="@string/matrix_q4_t2"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/q4Task1" />
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingTop="@dimen/space_xs"
+                        android:paddingBottom="@dimen/space_xs"
+                        android:visibility="gone"
+                        tools:text="Plan the weekend trip" />
 
                     <TextView
                         android:id="@+id/q4More"
                         style="@style/Text.Caption"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="@dimen/space_xs"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingTop="@dimen/space_xs"
+                        android:paddingBottom="@dimen/space_xs"
                         android:text="@string/matrix_more"
-                        android:textSize="11sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/q4Task2" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:textColor="@color/accent"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:id="@+id/matrixLegend"
-                style="@style/Text.Caption"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_lg"
-                android:gravity="center"
-                android:text="@string/matrix_legend"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cellQ4" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

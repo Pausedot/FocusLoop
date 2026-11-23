@@ -19,26 +19,38 @@ import java.util.List;
 import itech3106.focusloop.R;
 import itech3106.focusloop.data.WeekDay;
 
-/** A horizontal row of day cards for the Week mode on the Plan screen. */
+/** Day cards for the Week mode. Horizontal on wide screens, one full-width card per row in portrait. */
 public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.Holder> {
+
+    public interface OnDayClick {
+        void onDayClick(WeekDay day);
+    }
 
     public interface OnTaskClick {
         void onTaskClick(WeekDay.WeekTask task);
     }
 
-    private final List<WeekDay> days;
-    private final OnTaskClick listener;
+    private static final int MAX_TASKS = 3;
 
-    public WeekAdapter(List<WeekDay> days, OnTaskClick listener) {
+    private final List<WeekDay> days;
+    private final boolean horizontal;
+    private final OnDayClick dayListener;
+    private final OnTaskClick taskListener;
+
+    public WeekAdapter(List<WeekDay> days, boolean horizontal,
+                       OnDayClick dayListener, OnTaskClick taskListener) {
         this.days = days;
-        this.listener = listener;
+        this.horizontal = horizontal;
+        this.dayListener = dayListener;
+        this.taskListener = taskListener;
     }
 
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_week_day, parent, false);
+                .inflate(horizontal ? R.layout.item_week_day_compact
+                        : R.layout.item_week_day_vertical, parent, false);
         return new Holder(view);
     }
 
@@ -60,39 +72,68 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.Holder> {
                     holder.itemView.getContext(), R.color.ink));
         }
 
+        holder.itemView.setOnClickListener(v -> dayListener.onDayClick(day));
+
         holder.taskContainer.removeAllViews();
+        if (horizontal) {
+            holder.taskContainer.addView(day.tasks.isEmpty()
+                    ? freeLabel(holder.itemView)
+                    : countLabel(holder.itemView, day.tasks.size()));
+            return;
+        }
         if (day.tasks.isEmpty()) {
             holder.taskContainer.addView(freeLabel(holder.itemView));
             return;
         }
-        for (WeekDay.WeekTask task : day.tasks) {
-            holder.taskContainer.addView(taskLabel(holder.itemView, task));
+        int shown = Math.min(day.tasks.size(), MAX_TASKS);
+        for (int i = 0; i < shown; i++) {
+            holder.taskContainer.addView(taskLabel(holder.itemView, day.tasks.get(i)));
+        }
+        if (day.tasks.size() > shown) {
+            holder.taskContainer.addView(moreLabel(holder.itemView, day.tasks.size() - shown));
         }
     }
 
     private TextView freeLabel(View parent) {
         TextView text = new TextView(parent.getContext());
         text.setText(R.string.plan_week_free);
-        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, horizontal ? 12 : 14);
         text.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.ink_muted));
+        return text;
+    }
+
+    private TextView countLabel(View parent, int count) {
+        TextView text = new TextView(parent.getContext());
+        text.setText(parent.getContext().getResources()
+                .getQuantityString(R.plurals.week_task_count, count, count));
+        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+        text.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.ink_muted));
+        return text;
+    }
+
+    private TextView moreLabel(View parent, int count) {        TextView text = new TextView(parent.getContext());
+        text.setText(parent.getContext().getString(R.string.week_more_format, count));
+        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, horizontal ? 12 : 13);
+        text.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.accent));
+        text.setPadding(0, dp(parent, 2), 0, dp(parent, 4));
         return text;
     }
 
     private TextView taskLabel(View parent, WeekDay.WeekTask task) {
         TextView text = new TextView(parent.getContext());
         text.setText(task.title);
-        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, horizontal ? 12 : 14);
         text.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.ink));
         text.setMaxLines(2);
         text.setEllipsize(TextUtils.TruncateAt.END);
-        text.setPadding(0, 0, 0, dp(parent, 6));
+        text.setPadding(0, dp(parent, 4), 0, dp(parent, 4));
         text.setGravity(Gravity.START);
 
         TypedValue ripple = new TypedValue();
         parent.getContext().getTheme().resolveAttribute(
                 android.R.attr.selectableItemBackground, ripple, true);
         text.setBackgroundResource(ripple.resourceId);
-        text.setOnClickListener(v -> listener.onTaskClick(task));
+        text.setOnClickListener(v -> taskListener.onTaskClick(task));
         return text;
     }
 

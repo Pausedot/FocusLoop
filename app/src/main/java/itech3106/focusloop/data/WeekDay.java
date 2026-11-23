@@ -11,15 +11,22 @@ public class WeekDay {
     public final boolean today;
     public final boolean allDone;
     public final List<WeekTask> tasks;
+    public final int epochDay;
 
     public WeekDay(String label, String date, int minutes, boolean today,
                    boolean allDone, List<WeekTask> tasks) {
+        this(label, date, minutes, today, allDone, tasks, 0);
+    }
+
+    public WeekDay(String label, String date, int minutes, boolean today,
+                   boolean allDone, List<WeekTask> tasks, int epochDay) {
         this.label = label;
         this.date = date;
         this.minutes = minutes;
         this.today = today;
         this.allDone = allDone;
         this.tasks = tasks;
+        this.epochDay = epochDay;
     }
 
     public static class WeekTask {

@@ -240,6 +240,26 @@ public abstract class ModuleActivity extends BaseActivity {
         return Math.round(value * getResources().getDisplayMetrics().density);
     }
 
+    /**
+     * Up is hierarchical: secondary screens go to the module's default screen, and the
+     * default screen goes to Main. System back keeps its usual "previous screen" meaning.
+     */
+    private void goUp() {
+        Screen home = screensForModule().get(0);
+        Intent intent;
+        if (home.id == selfMenuItem()) {
+            intent = new Intent(this, MainActivity.class);
+        } else {
+            intent = new Intent(this, home.activity);
+            intent.putExtra(Extras.TASK_ID, getIntent().getStringExtra(Extras.TASK_ID));
+            intent.putExtra(Extras.TASK_TITLE, getIntent().getStringExtra(Extras.TASK_TITLE));
+        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
+    }
+
     private static final class Screen {
         final int id;
         final int title;
@@ -256,6 +276,10 @@ public abstract class ModuleActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            goUp();
+            return true;
+        }
         int id = item.getItemId();
         if (id == R.id.action_inbox) {
             startActivity(new Intent(this, TaskInboxActivity.class));

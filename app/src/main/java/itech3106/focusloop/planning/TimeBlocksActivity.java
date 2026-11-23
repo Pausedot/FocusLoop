@@ -1,6 +1,7 @@
 package itech3106.focusloop.planning;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -16,6 +17,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -27,8 +31,11 @@ import itech3106.focusloop.R;
 import itech3106.focusloop.adapter.TimeSlotAdapter;
 import itech3106.focusloop.adapter.WeekAdapter;
 import itech3106.focusloop.data.Dates;
-import itech3106.focusloop.data.DemoData;
+import itech3106.focusloop.data.FocusSession;
 import itech3106.focusloop.data.PlanStore;
+import itech3106.focusloop.data.SessionStore;
+import itech3106.focusloop.data.Task;
+import itech3106.focusloop.data.TaskStore;
 import itech3106.focusloop.data.TimeSlot;
 import itech3106.focusloop.data.WeekDay;
 import itech3106.focusloop.tasks.TaskDetailActivity;
@@ -38,6 +45,7 @@ public class TimeBlocksActivity extends ModuleActivity {
 
     private final List<TimeSlot> slots = new ArrayList<>();
     private TimeSlotAdapter adapter;
+    private WeekAdapter weekAdapter;
     private PlanStore planStore;
     private RecyclerView slotList;
     private RecyclerView weekList;
@@ -45,8 +53,10 @@ public class TimeBlocksActivity extends ModuleActivity {
     private TextView planHint;
     private MaterialButton btnPrev;
     private MaterialButton btnNext;
+    private ChipGroup viewToggle;
 
     private boolean weekMode;
+    private boolean landscape;
     private int dayOffset;
     private int weekOffset;
 
@@ -104,17 +114,20 @@ public class TimeBlocksActivity extends ModuleActivity {
             }
         }).attachToRecyclerView(slotList);
 
-        WeekAdapter weekAdapter = new WeekAdapter(DemoData.weekDays(), this::openTask);
+        Configuration config = getResources().getConfiguration();
+        landscape = config.orientation == Configuration.ORIENTATION_LANDSCAPE
+                || config.smallestScreenWidthDp >= 600;
+
         weekList = findViewById(R.id.weekList);
-        weekList.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        weekList.setAdapter(weekAdapter);
+        weekList.setLayoutManager(new LinearLayoutManager(this,
+                landscape ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL, false));
 
         weekSummary = findViewById(R.id.weekSummary);
         planHint = findViewById(R.id.planHint);
         btnPrev = findViewById(R.id.btnPrevDay);
         btnNext = findViewById(R.id.btnNextDay);
 
-        ChipGroup viewToggle = findViewById(R.id.viewToggle);
+        viewToggle = findViewById(R.id.viewToggle);
         viewToggle.check(weekMode ? R.id.chipWeek : R.id.chipDay);
         viewToggle.setOnCheckedStateChangeListener((group, checkedIds) -> {
             weekMode = checkedIds.contains(R.id.chipWeek);
@@ -130,6 +143,7 @@ public class TimeBlocksActivity extends ModuleActivity {
     private void shift(int direction) {
         if (weekMode) {
             weekOffset += direction;
+            refreshWeek();
         } else {
             dayOffset += direction;
             loadDay();
@@ -149,6 +163,9 @@ public class TimeBlocksActivity extends ModuleActivity {
     }
 
     private void applyMode() {
+        if (weekMode) {
+            refreshWeek();
+        }
         slotList.setVisibility(weekMode ? View.GONE : View.VISIBLE);
         weekList.setVisibility(weekMode ? View.VISIBLE : View.GONE);
         weekSummary.setVisibility(weekMode ? View.VISIBLE : View.GONE);
@@ -214,8 +231,93 @@ public class TimeBlocksActivity extends ModuleActivity {
         dateCaption.setText(captionRes);
     }
 
-    private void openTask(WeekDay.WeekTask task) {
-        Intent intent = new Intent(this, TaskDetailActivity.class);
+    private void refreshWeek() {
+        List<WeekDay> days = weekDays();
+        weekAdapter = new WeekAdapter(days, landscape, this::openDay, this::openTask);
+        weekList.setAdapter(weekAdapter);
+
+        int totalMinutes = 0;
+        for (WeekDay day : days) {
+            totalMinutes += day.minutes;
+        }
+
+        LocalDate monday = LocalDate.now().with(DayOfWeek.MONDAY).plusWeeks(weekOffset);
+        long start = Dates.startOfDay((int) monday.toEpochDay());
+        long end = Dates.startOfDay((int) monday.plusDays(7).toEpochDay());
+        int sessions = 0;
+        for (FocusSession session : new SessionStore(this).all()) {
+            if (session.startedAt >= start && session.startedAt < end) {
+                sessions++;
+            }
+        }
+        weekSummary.setText(getString(R.string.plan_week_summary_format,
+                duration(totalMinutes), sessions));
+    }
+
+    private List<WeekDay> weekDays() {
+        LocalDate monday = LocalDate.now().with(DayOfWeek.MONDAY).plusWeeks(weekOffset);
+        List<WeekDay> days = new ArrayList<>();
+        PlanStore plan = new PlanStore(this);
+        TaskStore tasks = new TaskStore(this);
+
+        for (int i = 0; i < 7; i++) {
+            LocalDate date = monday.plusDays(i);
+            int epochDay = (int) date.toEpochDay();
+
+            List<Task> due = new ArrayList<>();
+            boolean allDone = true;
+            for (Task task : tasks.all()) {
+                if (task.dueAt > 0 && Dates.epochDay(task.dueAt) == epochDay) {
+                    due.add(task);
+                    if (!task.done) {
+                        allDone = false;
+                    }
+                }
+            }
+            if (due.isEmpty()) {
+                allDone = false;
+            }
+
+            List<WeekDay.WeekTask> items = new ArrayList<>();
+            for (Task task : due) {
+                if (!task.done) {
+                    items.add(new WeekDay.WeekTask(task.id, task.title));
+                }
+            }
+
+            String label = date.getDayOfWeek()
+                    .getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+                    .toUpperCase(Locale.ENGLISH);
+            days.add(new WeekDay(label, String.valueOf(date.getDayOfMonth()),
+                    plan.plannedMinutes(epochDay), Dates.isToday(epochDay),
+                    allDone, items, epochDay));
+        }
+        return days;
+    }
+
+    private void openDay(WeekDay day) {
+        if (day.epochDay == 0) {
+            return;
+        }
+        dayOffset = day.epochDay - Dates.today();
+        if (viewToggle.getCheckedChipId() != R.id.chipDay) {
+            viewToggle.check(R.id.chipDay);
+        } else {
+            weekMode = false;
+            applyMode();
+        }
+        loadDay();
+        updateHeader();
+    }
+
+    private String duration(int minutes) {
+        if (minutes < 60) {
+            return getString(R.string.stats_duration_m, minutes);
+        }
+        return getString(R.string.stats_duration_hm, minutes / 60, minutes % 60);
+    }
+
+    private void openTask(WeekDay.WeekTask task) {        Intent intent = new Intent(this, TaskDetailActivity.class);
         intent.putExtra(Extras.TASK_ID, task.id);
         intent.putExtra(Extras.TASK_TITLE, task.title);
         startActivity(intent);
