@@ -10,12 +10,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.GestureDetector;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -69,6 +71,7 @@ public class PomodoroActivity extends ModuleActivity {
     private String taskTitle;
     private String taskId;
     private ActivityResultLauncher<Intent> taskPicker;
+    private AlertDialog completionDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -333,7 +336,7 @@ public class PomodoroActivity extends ModuleActivity {
     }
 
     private void showCompletionDialog() {
-        new MaterialAlertDialogBuilder(this)
+        completionDialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.session_complete_title)
                 .setMessage(R.string.session_complete_message)
                 .setCancelable(false)
@@ -347,7 +350,8 @@ public class PomodoroActivity extends ModuleActivity {
                     }
                     finish();
                 })
-                .show();
+                .create();
+        completionDialog.show();
     }
 
     private void openBreak() {
@@ -407,6 +411,39 @@ public class PomodoroActivity extends ModuleActivity {
             }
         }
         updateSessionChrome();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home
+                && (running || (remainingMs > 0 && remainingMs < sessionMs))) {
+            getOnBackPressedDispatcher().onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (running) {
+            return;
+        }
+        if (completionDialog != null) {
+            completionDialog.dismiss();
+            completionDialog = null;
+        }
+        taskId = intent.getStringExtra(Extras.TASK_ID);
+        taskTitle = intent.getStringExtra(Extras.TASK_TITLE);
+        showTask();
+        if (intent.getBooleanExtra(Extras.AUTO_START, false)) {
+            sessionMs = Prefs.focusMinutes(this) * 60_000L;
+            remainingMs = sessionMs;
+            updateTimerUi();
+            updateControls();
+            startTimer();
+        }
     }
 
     @Override

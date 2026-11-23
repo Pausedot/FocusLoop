@@ -98,6 +98,7 @@ public class FiveSecondActivity extends BaseActivity {
         intent.putExtra(Extras.TASK_ID, getIntent().getStringExtra(Extras.TASK_ID));
         intent.putExtra(Extras.TASK_TITLE, getIntent().getStringExtra(Extras.TASK_TITLE));
         intent.putExtra(Extras.AUTO_START, autoStart);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         finish();
     }

@@ -262,7 +262,7 @@
     <string name="plan_tomorrow">Tomorrow</string>
     <string name="plan_yesterday">Yesterday</string>
     <string name="plan_selected">Selected day</string>
-    <string name="block_meta_format">%1$s · 60 min</string>
+    <string name="block_meta_format">%1$s – %2$s · 60 min</string>
     <string name="plan_hint">Tap an hour to plan it. Long-press a block to move it.</string>
     <string name="plan_now">NOW</string>
     <string name="plan_add_block">Add a block</string>
@@ -277,11 +277,10 @@
     <!-- Block dialog -->
     <string name="dialog_new_block">New block</string>
     <string name="dialog_edit_block">Edit block</string>
-    <string name="dialog_block_hint">What are you doing?</string>
+    <string name="dialog_block_name">Block name</string>
+    <string name="dialog_block_required">Block name can\'t be empty</string>
     <string name="dialog_link_task">LINK A TASK</string>
     <string name="dialog_no_task">No task</string>
-    <string name="action_save_block">Save block</string>
-    <string name="action_delete_block">Delete block</string>
 
     <!-- Two minute list -->
     <string name="title_two_minute">2-minute list</string>

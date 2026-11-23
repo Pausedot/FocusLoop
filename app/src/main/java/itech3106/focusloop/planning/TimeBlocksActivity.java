@@ -3,6 +3,8 @@ package itech3106.focusloop.planning;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,6 +17,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -317,6 +320,15 @@ public class TimeBlocksActivity extends ModuleActivity {
         return getString(R.string.stats_duration_hm, minutes / 60, minutes % 60);
     }
 
+    private String endHour(String hour) {
+        try {
+            int value = Integer.parseInt(hour.substring(0, 2));
+            return String.format(Locale.ENGLISH, "%02d:00", (value + 1) % 24);
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            return hour;
+        }
+    }
+
     private void openTask(WeekDay.WeekTask task) {        Intent intent = new Intent(this, TaskDetailActivity.class);
         intent.putExtra(Extras.TASK_ID, task.id);
         intent.putExtra(Extras.TASK_TITLE, task.title);
@@ -326,35 +338,56 @@ public class TimeBlocksActivity extends ModuleActivity {
     private void showBlockDialog(TimeSlot slot) {
         View content = getLayoutInflater().inflate(R.layout.dialog_time_block, null);
         TextInputEditText edit = content.findViewById(R.id.blockEdit);
+        TextInputLayout inputLayout = content.findViewById(R.id.blockInputLayout);
+        boolean isNew = slot.title == null;
         edit.setText(slot.title);
+        edit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                inputLayout.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
         if (slot.title != null) {
             ((TextView) content.findViewById(R.id.blockTaskValue)).setText(slot.title);
         }
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
                 .setTitle(slot.title == null ? R.string.dialog_new_block : R.string.dialog_edit_block)
-                .setView(content)
-                .setPositiveButton(R.string.action_save_block, (dialog, which) -> {
-                    String text = edit.getText() == null ? "" : edit.getText().toString().trim();
-                    if (text.isEmpty()) {
-                        return;
-                    }
-                    slot.title = text;
-                    slot.meta = getString(R.string.block_meta_format, slot.hour);
-                    planStore.save(slot);
-                    adapter.notifyItemChanged(slots.indexOf(slot));
-                })
-                .setNegativeButton(R.string.action_cancel, null);
-
-        if (slot.title != null) {
-            builder.setNeutralButton(R.string.action_delete_block, (dialog, which) -> {
-                planStore.clear(slot);
-                adapter.notifyItemChanged(slots.indexOf(slot));
-            });
-        }
+                .setView(content);
 
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        View delete = content.findViewById(R.id.blockDelete);
+        delete.setVisibility(slot.title == null ? View.GONE : View.VISIBLE);
+        delete.setOnClickListener(v -> {
+            planStore.clear(slot);
+            adapter.notifyItemChanged(slots.indexOf(slot));
+            dialog.dismiss();
+        });
+        content.findViewById(R.id.blockCancel).setOnClickListener(v -> dialog.dismiss());
+        content.findViewById(R.id.blockSave).setOnClickListener(v -> {
+            String text = edit.getText() == null ? "" : edit.getText().toString().trim();
+            if (text.isEmpty()) {
+                inputLayout.setError(getString(R.string.dialog_block_required));
+                return;
+            }
+            slot.title = text;
+            if (isNew) {
+                slot.meta = getString(R.string.block_meta_format, slot.hour, endHour(slot.hour));
+            }
+            planStore.save(slot);
+            adapter.notifyItemChanged(slots.indexOf(slot));
+            dialog.dismiss();
+        });
         content.findViewById(R.id.blockTaskCard).setOnClickListener(v -> {
             dialog.dismiss();
             startActivity(new Intent(this, TaskInboxActivity.class));

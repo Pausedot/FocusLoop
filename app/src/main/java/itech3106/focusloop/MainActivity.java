@@ -57,6 +57,14 @@ public class MainActivity extends BaseActivity {
                 startActivity(new Intent(this, TimeBlocksActivity.class)));
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showFrog();
+        showNextBlock();
+        showFocusToday();
+    }
+
     private void showFrog() {
         Task frog = new TaskStore(this).frog();
         TextView title = findViewById(R.id.frogTitle);
