@@ -281,7 +281,10 @@ public abstract class ModuleActivity extends BaseActivity {
             return true;
         }
         if (id == R.id.action_pomodoro) {
-            startActivity(new Intent(this, PomodoroActivity.class));
+            Intent intent = new Intent(this, PomodoroActivity.class);
+            intent.putExtra(Extras.TASK_ID, getIntent().getStringExtra(Extras.TASK_ID));
+            intent.putExtra(Extras.TASK_TITLE, getIntent().getStringExtra(Extras.TASK_TITLE));
+            startActivity(intent);
             return true;
         }
         if (id == R.id.action_five_second) {

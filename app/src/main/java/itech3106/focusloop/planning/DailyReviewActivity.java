@@ -26,6 +26,7 @@ import itech3106.focusloop.data.Review;
 import itech3106.focusloop.data.ReviewStore;
 import itech3106.focusloop.data.SessionStore;
 import itech3106.focusloop.data.TaskStore;
+import itech3106.focusloop.reminder.ReminderScheduler;
 
 public class DailyReviewActivity extends ModuleActivity {
 
@@ -196,6 +197,7 @@ public class DailyReviewActivity extends ModuleActivity {
                 voicePath,
                 System.currentTimeMillis());
         reviewStore.save(review);
+        ReminderScheduler.scheduleReview(this);
         finish();
     }
 

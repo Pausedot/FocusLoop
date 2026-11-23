@@ -17,6 +17,11 @@ public final class Prefs {
     private static final String KEY_BREAK = "break_minutes";
     private static final String KEY_SOUND = "sound_enabled";
     private static final String KEY_DARK = "dark_mode";
+    private static final String KEY_TIMER_RUNNING = "timer_running";
+    private static final String KEY_TIMER_END = "timer_end";
+    private static final String KEY_TIMER_REMAINING = "timer_remaining";
+    private static final String KEY_TIMER_TASK_ID = "timer_task_id";
+    private static final String KEY_TIMER_TASK_TITLE = "timer_task_title";
 
     private Prefs() {
     }
@@ -55,6 +60,58 @@ public final class Prefs {
 
     public static void setDarkMode(Context context, boolean dark) {
         prefs(context).edit().putBoolean(KEY_DARK, dark).apply();
+    }
+
+    public static void saveTimerRunning(Context context, long endAt,
+                                        String taskId, String taskTitle) {
+        prefs(context).edit()
+                .putBoolean(KEY_TIMER_RUNNING, true)
+                .putLong(KEY_TIMER_END, endAt)
+                .putString(KEY_TIMER_TASK_ID, taskId == null ? "" : taskId)
+                .putString(KEY_TIMER_TASK_TITLE, taskTitle == null ? "" : taskTitle)
+                .apply();
+    }
+
+    public static void saveTimerPaused(Context context, long remaining,
+                                       String taskId, String taskTitle) {
+        prefs(context).edit()
+                .putBoolean(KEY_TIMER_RUNNING, false)
+                .putLong(KEY_TIMER_REMAINING, remaining)
+                .putString(KEY_TIMER_TASK_ID, taskId == null ? "" : taskId)
+                .putString(KEY_TIMER_TASK_TITLE, taskTitle == null ? "" : taskTitle)
+                .apply();
+    }
+
+    public static boolean timerRunning(Context context) {
+        return prefs(context).getBoolean(KEY_TIMER_RUNNING, false);
+    }
+
+    public static long timerEndAt(Context context) {
+        return prefs(context).getLong(KEY_TIMER_END, 0L);
+    }
+
+    public static long timerRemaining(Context context) {
+        return prefs(context).getLong(KEY_TIMER_REMAINING, 0L);
+    }
+
+    public static String timerTaskId(Context context) {
+        String value = prefs(context).getString(KEY_TIMER_TASK_ID, "");
+        return value == null || value.isEmpty() ? null : value;
+    }
+
+    public static String timerTaskTitle(Context context) {
+        String value = prefs(context).getString(KEY_TIMER_TASK_TITLE, "");
+        return value == null || value.isEmpty() ? null : value;
+    }
+
+    public static void clearTimer(Context context) {
+        prefs(context).edit()
+                .remove(KEY_TIMER_RUNNING)
+                .remove(KEY_TIMER_END)
+                .remove(KEY_TIMER_REMAINING)
+                .remove(KEY_TIMER_TASK_ID)
+                .remove(KEY_TIMER_TASK_TITLE)
+                .apply();
     }
 
     public static void restoreDefaults(Context context) {

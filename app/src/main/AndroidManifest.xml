@@ -79,6 +79,9 @@
         <activity
             android:name=".planning.ReviewArchiveActivity"
             android:exported="false" />
+        <receiver
+            android:name=".reminder.ReminderReceiver"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -28,6 +28,7 @@ import itech3106.focusloop.adapter.TaskAdapter;
 import itech3106.focusloop.data.DemoData;
 import itech3106.focusloop.data.Task;
 import itech3106.focusloop.data.TaskStore;
+import itech3106.focusloop.reminder.ReminderScheduler;
 
 public class TaskInboxActivity extends ModuleActivity implements TaskDetailFragment.Listener {
 
@@ -40,12 +41,14 @@ public class TaskInboxActivity extends ModuleActivity implements TaskDetailFragm
     private View emptyState;
     private FrameLayout detailContainer;
     private View detailPlaceholder;
+    private boolean pickMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_inbox);
-        bindChrome(R.string.title_tasks);
+        pickMode = getIntent().getBooleanExtra(Extras.PICK_TASK, false);
+        bindChrome(pickMode ? R.string.title_pick_task : R.string.title_tasks);
 
         store = new TaskStore(this);
         detailContainer = findViewById(R.id.detailContainer);
@@ -130,6 +133,10 @@ public class TaskInboxActivity extends ModuleActivity implements TaskDetailFragm
 
         findViewById(R.id.fabAdd).setOnClickListener(v -> openEditor());
         findViewById(R.id.emptyAction).setOnClickListener(v -> openEditor());
+        if (pickMode) {
+            findViewById(R.id.fabAdd).setVisibility(View.GONE);
+            findViewById(R.id.emptyAction).setVisibility(View.GONE);
+        }
 
         if (detailContainer != null
                 && getSupportFragmentManager().findFragmentByTag("detail") != null
@@ -147,6 +154,7 @@ public class TaskInboxActivity extends ModuleActivity implements TaskDetailFragm
             return;
         }
         load();
+        ReminderScheduler.scheduleTasks(this);
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("detail");
         if (fragment instanceof TaskDetailFragment) {
             ((TaskDetailFragment) fragment).reload();
@@ -161,6 +169,14 @@ public class TaskInboxActivity extends ModuleActivity implements TaskDetailFragm
     }
 
     private void openDetail(Task task) {
+        if (pickMode) {
+            Intent data = new Intent();
+            data.putExtra(Extras.TASK_ID, task.id);
+            data.putExtra(Extras.TASK_TITLE, task.title);
+            setResult(RESULT_OK, data);
+            finish();
+            return;
+        }
         if (detailContainer == null) {
             Intent intent = new Intent(this, TaskDetailActivity.class);
             intent.putExtra(Extras.TASK_ID, task.id);

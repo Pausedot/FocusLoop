@@ -58,6 +58,11 @@ public class TimeBlocksActivity extends ModuleActivity {
 
         planStore = new PlanStore(this);
         dayOffset = getIntent().getIntExtra(Extras.DAY_OFFSET, 0);
+        if (savedInstanceState != null) {
+            weekMode = savedInstanceState.getBoolean("weekMode", false);
+            dayOffset = savedInstanceState.getInt("dayOffset", dayOffset);
+            weekOffset = savedInstanceState.getInt("weekOffset", 0);
+        }
         slots.addAll(planStore.forDay(Dates.today() + dayOffset));
         adapter = new TimeSlotAdapter(slots, currentHour(), this::showBlockDialog);
         slotList = findViewById(R.id.slotList);
@@ -110,6 +115,7 @@ public class TimeBlocksActivity extends ModuleActivity {
         btnNext = findViewById(R.id.btnNextDay);
 
         ChipGroup viewToggle = findViewById(R.id.viewToggle);
+        viewToggle.check(weekMode ? R.id.chipWeek : R.id.chipDay);
         viewToggle.setOnCheckedStateChangeListener((group, checkedIds) -> {
             weekMode = checkedIds.contains(R.id.chipWeek);
             applyMode();
@@ -251,6 +257,14 @@ public class TimeBlocksActivity extends ModuleActivity {
             dialog.dismiss();
             startActivity(new Intent(this, TaskInboxActivity.class));
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("weekMode", weekMode);
+        outState.putInt("dayOffset", dayOffset);
+        outState.putInt("weekOffset", weekOffset);
     }
 
     @Override

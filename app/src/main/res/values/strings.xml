@@ -46,6 +46,7 @@
 
     <!-- Task inbox -->
     <string name="title_tasks">Tasks</string>
+    <string name="title_pick_task">Pick a task</string>
     <string name="inbox_summary">8 open · 3 due today</string>
     <string name="inbox_summary_format">%1$d open · %2$d due today</string>
     <string name="title_done">Done</string>
@@ -111,6 +112,10 @@
     <string name="matrix_count_one">1 task</string>
     <string name="matrix_count_two">2 tasks</string>
     <string name="matrix_count_three">3 tasks</string>
+    <string name="matrix_count_format">%1$d tasks</string>
+    <string name="matrix_more_format">+%1$d more</string>
+    <string name="matrix_frog_empty">Pick a task from the inbox</string>
+    <string name="matrix_frog_meta_empty">No frog yet</string>
     <string name="matrix_legend">A → Q1 · B → Q2 · C → Q3 · D/E → Q4</string>
     <string name="matrix_q1_t1">Redesign the case study layout</string>
     <string name="matrix_q1_t2">Reply to the client about scope</string>
@@ -170,6 +175,10 @@
     <string name="break_next_focus">Start next focus</string>
     <string name="break_done">Done for now</string>
     <string name="session_take_break">Take a break</string>
+    <string name="session_end_title">End this session?</string>
+    <string name="session_end_message">The time you spent will be saved as Stopped early.</string>
+    <string name="session_end_record">End &amp; save</string>
+    <string name="session_keep_going">Keep going</string>
     <string name="focus_hint">One loop at a time.</string>
     <string name="cd_timer_double_tap">Double tap to pause or resume</string>
     <string name="focus_caption">25 min focus</string>
@@ -178,6 +187,17 @@
     <string name="session_start_another">Start another</string>
     <string name="session_back_to_task">Back to task</string>
     <string name="notification_channel_name">Focus sessions</string>
+    <string name="notification_channel_timer">Focus timer</string>
+    <string name="notification_running_title">Focusing</string>
+    <string name="notification_paused_format">%1$s · paused</string>
+    <string name="notification_action_pause">Pause</string>
+    <string name="notification_action_resume">Resume</string>
+    <string name="notification_action_stop">Stop</string>
+    <string name="reminder_channel_name">Reminders</string>
+    <string name="reminder_tasks_title">Tasks due today</string>
+    <string name="reminder_tasks_text_format">%1$d tasks due today. Pick one and start.</string>
+    <string name="reminder_review_title">Time to review</string>
+    <string name="reminder_review_text">Three questions about your day.</string>
     <string name="notification_title">Focus complete</string>
     <string name="notification_text_format">%1$s · %2$d min</string>
     <string name="cd_reset_timer">Reset timer</string>

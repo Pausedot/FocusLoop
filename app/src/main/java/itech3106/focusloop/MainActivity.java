@@ -18,6 +18,7 @@ import itech3106.focusloop.data.TimeSlot;
 import itech3106.focusloop.focus.FocusHistoryActivity;
 import itech3106.focusloop.focus.PomodoroActivity;
 import itech3106.focusloop.planning.TimeBlocksActivity;
+import itech3106.focusloop.reminder.ReminderScheduler;
 import itech3106.focusloop.tasks.TaskDetailActivity;
 import itech3106.focusloop.tasks.TaskInboxActivity;
 
@@ -28,6 +29,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bindChrome(0);
+
+        ReminderScheduler.scheduleAll(this);
 
         ((TextView) findViewById(R.id.dateLabel))
                 .setText(Dates.longDate(Dates.today()).toUpperCase(Locale.ENGLISH));
