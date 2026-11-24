@@ -80,8 +80,12 @@ public class HistoryListFragment extends Fragment {
             }
         }));
 
-        sessionsValue.setText(String.valueOf(store.today().size()));
-        minutesValue.setText(String.valueOf(store.minutesToday()));
+        int minutes = 0;
+        for (FocusSession session : sessions) {
+            minutes += session.minutes;
+        }
+        sessionsValue.setText(String.valueOf(sessions.size()));
+        minutesValue.setText(String.valueOf(minutes));
 
         boolean isEmpty = rows.isEmpty();
         list.setVisibility(isEmpty ? View.GONE : View.VISIBLE);

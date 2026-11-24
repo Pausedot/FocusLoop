@@ -226,7 +226,7 @@
     <string name="settings_sound">Sound</string>
     <string name="settings_sound_sub">Play a tone when the loop ends</string>
     <string name="settings_dark">Dark theme</string>
-    <string name="settings_dark_sub">Use the system setting</string>
+    <string name="settings_dark_sub">Applies after Save</string>
     <string name="settings_restore">Restore defaults</string>
 
     <!-- Five second -->
