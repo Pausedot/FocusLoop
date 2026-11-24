@@ -19,7 +19,7 @@ import java.util.List;
 import itech3106.focusloop.R;
 import itech3106.focusloop.data.WeekDay;
 
-/** Day cards for the Week mode. Horizontal on tablet landscape; vertical everywhere else. */
+/** One full-width day card per row, in every orientation. */
 public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.Holder> {
 
     public interface OnDayClick {
@@ -33,16 +33,12 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.Holder> {
     private static final int MAX_TASKS = 3;
 
     private final List<WeekDay> days;
-    private final boolean horizontal;
-    private final boolean wideCompact;
     private final OnDayClick dayListener;
     private final OnTaskClick taskListener;
 
-    public WeekAdapter(List<WeekDay> days, boolean horizontal, boolean wideCompact,
+    public WeekAdapter(List<WeekDay> days,
                        OnDayClick dayListener, OnTaskClick taskListener) {
         this.days = days;
-        this.horizontal = horizontal;
-        this.wideCompact = wideCompact;
         this.dayListener = dayListener;
         this.taskListener = taskListener;
     }
@@ -50,11 +46,8 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.Holder> {
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        int layout = wideCompact ? R.layout.item_week_day_wide
-                : horizontal ? R.layout.item_week_day_compact
-                : R.layout.item_week_day_vertical;
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(layout, parent, false);
+                .inflate(R.layout.item_week_day_vertical, parent, false);
         return new Holder(view);
     }
 
@@ -79,12 +72,6 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.Holder> {
         holder.itemView.setOnClickListener(v -> dayListener.onDayClick(day));
 
         holder.taskContainer.removeAllViews();
-        if (horizontal || wideCompact) {
-            holder.taskContainer.addView(day.tasks.isEmpty()
-                    ? freeLabel(holder.itemView)
-                    : countLabel(holder.itemView, day.tasks.size()));
-            return;
-        }
         if (day.tasks.isEmpty()) {
             holder.taskContainer.addView(freeLabel(holder.itemView));
             return;
@@ -101,23 +88,15 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.Holder> {
     private TextView freeLabel(View parent) {
         TextView text = new TextView(parent.getContext());
         text.setText(R.string.plan_week_free);
-        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, horizontal || wideCompact ? 12 : 14);
+        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         text.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.ink_muted));
         return text;
     }
 
-    private TextView countLabel(View parent, int count) {
+    private TextView moreLabel(View parent, int count) {
         TextView text = new TextView(parent.getContext());
-        text.setText(parent.getContext().getResources()
-                .getQuantityString(R.plurals.week_task_count, count, count));
-        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
-        text.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.ink_muted));
-        return text;
-    }
-
-    private TextView moreLabel(View parent, int count) {        TextView text = new TextView(parent.getContext());
         text.setText(parent.getContext().getString(R.string.week_more_format, count));
-        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, horizontal ? 12 : 13);
+        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
         text.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.accent));
         text.setPadding(0, dp(parent, 2), 0, dp(parent, 4));
         return text;
@@ -126,7 +105,7 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.Holder> {
     private TextView taskLabel(View parent, WeekDay.WeekTask task) {
         TextView text = new TextView(parent.getContext());
         text.setText(task.title);
-        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, horizontal ? 12 : 14);
+        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         text.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.ink));
         text.setMaxLines(2);
         text.setEllipsize(TextUtils.TruncateAt.END);

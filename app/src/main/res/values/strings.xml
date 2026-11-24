@@ -32,10 +32,6 @@
     <string name="main_focus_minutes">70</string>
     <string name="main_focus_unit">min</string>
     <string name="main_focus_sessions">3 sessions</string>
-    <plurals name="week_task_count">
-        <item quantity="one">%d task</item>
-        <item quantity="other">%d tasks</item>
-    </plurals>
 
     <plurals name="matrix_task_count">
         <item quantity="one">%d task</item>

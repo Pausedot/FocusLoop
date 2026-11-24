@@ -144,7 +144,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/planHint"
-        tools:listitem="@layout/item_week_day" />
+        tools:listitem="@layout/item_week_day_vertical" />
 
     <TextView
         android:id="@+id/weekSummary"
