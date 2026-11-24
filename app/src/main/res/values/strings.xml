@@ -118,7 +118,6 @@
     <string name="matrix_count_one">1 task</string>
     <string name="matrix_count_two">2 tasks</string>
     <string name="matrix_count_three">3 tasks</string>
-    <string name="matrix_count_format">%1$d tasks</string>
     <string name="matrix_more_format">+%1$d more</string>
     <string name="matrix_frog_empty">Pick a task from the inbox</string>
     <string name="matrix_frog_meta_empty">No frog yet</string>
@@ -134,20 +133,16 @@
 
     <!-- Task detail -->
     <string name="title_task">Task</string>
-    <string name="detail_due_today">Due today</string>
-    <string name="detail_quadrant">Q1 · Important &amp; urgent</string>
     <string name="detail_label_notes">NOTES</string>
     <string name="detail_select_task">Select a task to see the details.</string>
     <string name="detail_add_photo">Add photo</string>
     <string name="detail_remove_photo">Remove photo</string>
     <string name="detail_photo">Task photo</string>
     <string name="settings_preview_playing">Playing preview</string>    <string name="detail_label_focus">FOCUSED ON THIS</string>
-    <string name="detail_focus_value">3 sessions · 70 min</string>
     <plurals name="detail_sessions">
         <item quantity="one">%1$d session</item>
         <item quantity="other">%1$d sessions</item>
     </plurals>
-    <string name="detail_notes_mock">Reduce the case study page to one column, keep the process photos, and cut the copy in half. Print it at A3 to check the grid before the review.</string>
     <string name="detail_start_focus">Start focus</string>
     <string name="detail_mark_complete">Mark complete</string>
     <string name="delete_task_title">Delete task?</string>
