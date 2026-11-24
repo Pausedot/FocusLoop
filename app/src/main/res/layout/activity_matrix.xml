@@ -223,7 +223,7 @@
                         android:paddingTop="@dimen/space_xs"
                         android:paddingBottom="@dimen/space_xs"
                         android:visibility="gone"
-                        tools:text="Outline the A2 database schema" />
+                        tools:text="Prepare the design handoff" />
 
                     <TextView
                         android:id="@+id/q2Task2"
@@ -236,7 +236,7 @@
                         android:paddingTop="@dimen/space_xs"
                         android:paddingBottom="@dimen/space_xs"
                         android:visibility="gone"
-                        tools:text="Read chapter 7 on notifications" />
+                        tools:text="Review the homepage prototype" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

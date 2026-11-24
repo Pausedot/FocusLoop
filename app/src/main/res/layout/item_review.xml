@@ -44,7 +44,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tomorrowLabel"
-            tools:text="Outline the A2 schema." />
+            tools:text="Finish the design handoff." />
 
         <TextView
             android:id="@+id/wentWellLabel"

@@ -124,9 +124,9 @@
     <string name="matrix_frog_meta_empty">No frog yet</string>
     <string name="matrix_legend">A → Q1 · B → Q2 · C → Q3 · D/E → Q4</string>
     <string name="matrix_q1_t1">Redesign the case study layout</string>
-    <string name="matrix_q1_t2">Reply to the client about scope</string>
-    <string name="matrix_q2_t1">Outline the A2 database schema</string>
-    <string name="matrix_q2_t2">Read chapter 7 on notifications</string>
+    <string name="matrix_q1_t2">Send the client the revised scope</string>
+    <string name="matrix_q2_t1">Prepare the design handoff</string>
+    <string name="matrix_q2_t2">Review the homepage prototype</string>
     <string name="matrix_q3_t1">Book the dentist</string>
     <string name="matrix_q4_t1">Clean up Figma components</string>
     <string name="matrix_q4_t2">Plan the weekend trip</string>

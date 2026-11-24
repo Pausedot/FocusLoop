@@ -21,20 +21,22 @@ public final class Seed {
         List<Task> tasks = new ArrayList<>();
         tasks.add(task("t1", "Redesign the case study layout", 'A', "Today", "Q1", NOTES,
                 Dates.at(today, 18, 0), true));
-        tasks.add(task("t2", "Reply to the client about scope", 'A', "Today", "Q1",
+        tasks.add(task("t2", "Send the client the revised scope", 'A', "Today", "Q1",
                 "Confirm the two extra screens before Friday.", Dates.at(today, 18, 0), false));
         tasks.add(task("t4", "Book the dentist", 'C', "Today", "Q3",
                 "The check-up is overdue by two months.", Dates.at(today, 18, 0), false));
-        tasks.add(task("t3", "Outline the A2 database schema", 'B', "Tomorrow", "Q2",
-                "Three tables is enough for the prototype.", Dates.at(today + 1, 18, 0), false));
-        tasks.add(task("t5", "Read chapter 7 on notifications", 'B', "Fri 30 Oct", "Q2",
-                "Focus on channels and permission states.", 0L, false));
+        tasks.add(task("t3", "Prepare the design handoff", 'B', "Tomorrow", "Q2",
+                "Package the components and redlines for engineering.",
+                Dates.at(today + 1, 18, 0), false));
+        tasks.add(task("t5", "Review the homepage prototype", 'B', "Tomorrow", "Q2",
+                "Check the new homepage flow at 1440 and 390.",
+                Dates.at(today + 1, 18, 0), false));
         tasks.add(task("t6", "Clean up Figma components", 'D', "No date", "Q4",
                 "Merge the duplicate button styles.", 0L, false));
         tasks.add(task("t7", "Plan the weekend trip", 'D', "No date", "Q4",
                 "Check the train times on Thursday.", 0L, false));
-        tasks.add(task("t8", "Update the resume", 'E', "No date", "Q4",
-                "Add the focus app once the prototype is done.", 0L, false));
+        tasks.add(task("t8", "Update the portfolio site", 'E', "No date", "Q4",
+                "Add the latest case study and update the about page.", 0L, false));
         return tasks;
     }
 
@@ -52,11 +54,11 @@ public final class Seed {
         sessions.add(new FocusSession("seed-s1", Dates.at(today, 9, 12), "t1",
                 "Redesign the case study layout", 25, true, 1));
         sessions.add(new FocusSession("seed-s2", Dates.at(today, 10, 5), "t2",
-                "Reply to the client about scope", 25, true, 2));
+                "Send the client the revised scope", 25, true, 2));
         sessions.add(new FocusSession("seed-s3", Dates.at(today, 11, 40), "t3",
-                "Outline the A2 database schema", 20, false, 3));
+                "Prepare the design handoff", 20, false, 3));
         sessions.add(new FocusSession("seed-s4", Dates.at(today - 1, 14, 0), "t5",
-                "Read chapter 7 on notifications", 25, true, 1));
+                "Review the homepage prototype", 25, true, 1));
         sessions.add(new FocusSession("seed-s5", Dates.at(today - 1, 15, 10), "t6",
                 "Clean up Figma components", 25, true, 2));
         sessions.add(new FocusSession("seed-s6", Dates.at(today - 2, 8, 50), "t1",
@@ -80,15 +82,15 @@ public final class Seed {
     private static String blockTitle(int hour) {
         switch (hour) {
             case 9:
-                return "Team standup";
+                return "Client check-in";
             case 10:
                 return "Redesign case study";
             case 11:
                 return "Client email";
             case 13:
-                return "A2 schema";
+                return "Design handoff";
             case 16:
-                return "Reading";
+                return "Prototype review";
             default:
                 return null;
         }
@@ -117,7 +119,7 @@ public final class Seed {
         reviews.add(new Review("seed-r1", today - 1,
                 "Finished the case study layout before lunch.",
                 "Messages broke the second session.",
-                "Outline the A2 schema.",
+                "Finish the design handoff.",
                 2, null, Dates.at(today - 1, 21, 30)));
         reviews.add(new Review("seed-r2", today - 3,
                 "Two clean focus sessions and a walk.",

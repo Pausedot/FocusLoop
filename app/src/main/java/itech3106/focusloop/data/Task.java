@@ -10,7 +10,7 @@ public class Task {
     public final String title;
     public final String notes;
     public final char priority;
-    /** Display label kept from A1: "Today", "Tomorrow", "Fri 30 Oct", "No date". */
+    /** Display label kept from A1: "Today", "Tomorrow", "No date". */
     public final String due;
     public final String quadrant;
     /** Machine-readable due date in epoch milliseconds; 0 when there is no date. */
