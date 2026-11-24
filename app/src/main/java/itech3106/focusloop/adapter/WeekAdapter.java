@@ -19,7 +19,7 @@ import java.util.List;
 import itech3106.focusloop.R;
 import itech3106.focusloop.data.WeekDay;
 
-/** Day cards for the Week mode. Horizontal on wide screens, one full-width card per row in portrait. */
+/** Day cards for the Week mode. Horizontal on tablet landscape; vertical everywhere else. */
 public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.Holder> {
 
     public interface OnDayClick {
@@ -34,13 +34,15 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.Holder> {
 
     private final List<WeekDay> days;
     private final boolean horizontal;
+    private final boolean wideCompact;
     private final OnDayClick dayListener;
     private final OnTaskClick taskListener;
 
-    public WeekAdapter(List<WeekDay> days, boolean horizontal,
+    public WeekAdapter(List<WeekDay> days, boolean horizontal, boolean wideCompact,
                        OnDayClick dayListener, OnTaskClick taskListener) {
         this.days = days;
         this.horizontal = horizontal;
+        this.wideCompact = wideCompact;
         this.dayListener = dayListener;
         this.taskListener = taskListener;
     }
@@ -48,9 +50,11 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.Holder> {
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        int layout = wideCompact ? R.layout.item_week_day_wide
+                : horizontal ? R.layout.item_week_day_compact
+                : R.layout.item_week_day_vertical;
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(horizontal ? R.layout.item_week_day_compact
-                        : R.layout.item_week_day_vertical, parent, false);
+                .inflate(layout, parent, false);
         return new Holder(view);
     }
 
@@ -75,7 +79,7 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.Holder> {
         holder.itemView.setOnClickListener(v -> dayListener.onDayClick(day));
 
         holder.taskContainer.removeAllViews();
-        if (horizontal) {
+        if (horizontal || wideCompact) {
             holder.taskContainer.addView(day.tasks.isEmpty()
                     ? freeLabel(holder.itemView)
                     : countLabel(holder.itemView, day.tasks.size()));
@@ -97,7 +101,7 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.Holder> {
     private TextView freeLabel(View parent) {
         TextView text = new TextView(parent.getContext());
         text.setText(R.string.plan_week_free);
-        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, horizontal ? 12 : 14);
+        text.setTextSize(TypedValue.COMPLEX_UNIT_SP, horizontal || wideCompact ? 12 : 14);
         text.setTextColor(ContextCompat.getColor(parent.getContext(), R.color.ink_muted));
         return text;
     }

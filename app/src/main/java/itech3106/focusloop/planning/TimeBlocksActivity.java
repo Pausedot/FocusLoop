@@ -64,7 +64,8 @@ public class TimeBlocksActivity extends ModuleActivity {
     private String dialogTaskId;
 
     private boolean weekMode;
-    private boolean landscape;
+    private boolean horizontalWeek;
+    private boolean wideWeek;
     private int dayOffset;
     private int weekOffset;
 
@@ -139,12 +140,14 @@ public class TimeBlocksActivity extends ModuleActivity {
         }).attachToRecyclerView(slotList);
 
         Configuration config = getResources().getConfiguration();
-        landscape = config.orientation == Configuration.ORIENTATION_LANDSCAPE
-                || config.smallestScreenWidthDp >= 600;
+        horizontalWeek = config.orientation == Configuration.ORIENTATION_LANDSCAPE
+                && config.smallestScreenWidthDp >= 600;
+        wideWeek = config.orientation == Configuration.ORIENTATION_LANDSCAPE
+                && !horizontalWeek;
 
         weekList = findViewById(R.id.weekList);
         weekList.setLayoutManager(new LinearLayoutManager(this,
-                landscape ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL, false));
+                horizontalWeek ? RecyclerView.HORIZONTAL : RecyclerView.VERTICAL, false));
 
         weekSummary = findViewById(R.id.weekSummary);
         planHint = findViewById(R.id.planHint);
@@ -193,6 +196,7 @@ public class TimeBlocksActivity extends ModuleActivity {
         slotList.setVisibility(weekMode ? View.GONE : View.VISIBLE);
         weekList.setVisibility(weekMode ? View.VISIBLE : View.GONE);
         weekSummary.setVisibility(weekMode ? View.VISIBLE : View.GONE);
+        planHint.setVisibility(weekMode && wideWeek ? View.GONE : View.VISIBLE);
         planHint.setText(weekMode ? R.string.plan_week_hint : R.string.plan_hint);
 
         btnPrev.setContentDescription(getString(
@@ -257,7 +261,8 @@ public class TimeBlocksActivity extends ModuleActivity {
 
     private void refreshWeek() {
         List<WeekDay> days = weekDays();
-        weekAdapter = new WeekAdapter(days, landscape, this::openDay, this::openTask);
+        weekAdapter = new WeekAdapter(days, horizontalWeek, wideWeek,
+                this::openDay, this::openTask);
         weekList.setAdapter(weekAdapter);
 
         int totalMinutes = 0;

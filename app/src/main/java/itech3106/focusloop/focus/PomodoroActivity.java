@@ -12,6 +12,7 @@ import android.os.CountDownTimer;
 import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
@@ -312,6 +313,11 @@ public class PomodoroActivity extends ModuleActivity {
         int round = stats.completedToday() % 4 + 1;
         ((TextView) findViewById(R.id.sessionLabel))
                 .setText(getString(R.string.focus_session_format, round));
+        ViewGroup dots = findViewById(R.id.cycleDots);
+        for (int i = 0; i < dots.getChildCount(); i++) {
+            dots.getChildAt(i).setBackgroundResource(
+                    i < round ? R.drawable.bg_dot_accent : R.drawable.bg_dot_muted);
+        }
         ((TextView) findViewById(R.id.timerCaption))
                 .setText(getString(R.string.focus_caption_format, Prefs.focusMinutes(this)));
         ((TextView) findViewById(R.id.focusTodayValue))
